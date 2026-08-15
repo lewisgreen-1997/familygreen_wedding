@@ -161,12 +161,37 @@
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
   <script src="wedding-data.js"></script>
   <script src="wedding-plan.js"></script>
-  <script>
+  <script src="supabase-config.js"></script>
+  <script type="module">
+    const sharedStore = window.WEDDING_SUPABASE;
+    const sharedHeaders = sharedStore ? { apikey: sharedStore.publishableKey, Authorization: `Bearer ${sharedStore.publishableKey}` } : null;
+    async function loadSharedPlan() {
+      if (!sharedStore) return null;
+      try {
+        const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?id=eq.${encodeURIComponent(sharedStore.planId)}&select=plan`, { headers: sharedHeaders });
+        if (!response.ok) throw new Error(`Shared plan load failed (${response.status})`);
+        const [record] = await response.json();
+        return record?.plan || null;
+      } catch (error) {
+        console.warn('Using this browser\'s saved wedding plan while the shared store is unavailable.', error);
+        return null;
+      }
+    }
+    async function saveSharedPlan(plan) {
+      if (!sharedStore) return;
+      const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?on_conflict=id`, {
+        method: 'POST',
+        headers: { ...sharedHeaders, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({ id: sharedStore.planId, plan, updated_at: new Date().toISOString() })
+      });
+      if (!response.ok) throw new Error(`Shared plan save failed (${response.status})`);
+    }
+    const remotePlan = await loadSharedPlan();
     const PLAN_VERSION = 'repository-plan-2026-08-15';
     const sourcePlan = window.WEDDING_PLAN_DATA || window.WEDDING_DATA;
     const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
     const shouldResetPlan = localStorage.getItem('megan-lewis-wedding-plan-version') !== PLAN_VERSION;
-    const timelineData = !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(sourcePlan);
+    const timelineData = remotePlan ? structuredClone(remotePlan) : !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(sourcePlan);
     if (shouldResetPlan) {
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
       localStorage.setItem('megan-lewis-wedding-plan-version', PLAN_VERSION);
@@ -438,7 +463,7 @@
       });
       editDialog.querySelector('#sequence-type').addEventListener('change', sequenceChange => { editDialog.querySelector('#sequence-step-fields').hidden = sequenceChange.target.value !== 'step'; });
       editDialog.querySelector('[data-form-delete-id]')?.addEventListener('click', deleteClick => deleteEvent(deleteClick.currentTarget.dataset.formDeleteId));
-      editDialog.querySelector('#event-form').addEventListener('submit', formEvent => {
+      editDialog.querySelector('#event-form').addEventListener('submit', async formEvent => {
         formEvent.preventDefault(); const form = new FormData(formEvent.currentTarget); const now = Date.now();
         const id = event?.id || `event-${now}`; const detailId = detail?.id || `${id}-detail`;
         const updated = event || { id, major:false };
@@ -451,10 +476,10 @@
         timelineData.relationships.push({ detailId, entityId:`period-${updated.periodId}`, role:'period' });
         if (form.get('ownerId')) timelineData.relationships.push({ detailId, entityId:form.get('ownerId'), role:'owner' });
         form.getAll('informedIds').forEach(entityId => timelineData.relationships.push({ detailId, entityId, role:'informed' }));
-        localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); window.location.reload();
+        await persistPlan(); window.location.reload();
       });
     }
-    function deleteEvent(eventId) { if (!confirm('Delete this event and its detail records?')) return; const detailIds = timelineData.eventDetails.filter(detail => detail.eventId === eventId).map(detail => detail.id); timelineData.events = timelineData.events.filter(event => event.id !== eventId); timelineData.eventDetails = timelineData.eventDetails.filter(detail => detail.eventId !== eventId); timelineData.relationships = timelineData.relationships.filter(relation => !detailIds.includes(relation.detailId)); localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); window.location.reload(); }
+    async function deleteEvent(eventId) { if (!confirm('Delete this event and its detail records?')) return; const detailIds = timelineData.eventDetails.filter(detail => detail.eventId === eventId).map(detail => detail.id); timelineData.events = timelineData.events.filter(event => event.id !== eventId); timelineData.eventDetails = timelineData.eventDetails.filter(detail => detail.eventId !== eventId); timelineData.relationships = timelineData.relationships.filter(relation => !detailIds.includes(relation.detailId)); await persistPlan(); window.location.reload(); }
     editModal.addEventListener('click', event => { if (event.target === editModal) editModal.hidden = true; });
     let inlineEditingId = null;
     function startInlineEdit(eventId) {
@@ -483,7 +508,12 @@
       card.querySelectorAll('[data-inline-field="detail-title"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) detail.title = field.textContent.trim(); });
       persistPlan(); card.classList.remove('inline-editing'); card.querySelectorAll('[data-inline-field]').forEach(field => field.contentEditable = 'false'); inlineEditingId = null;
     }
-    function persistPlan() { localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); }
+    let pendingPlanSave = Promise.resolve();
+    function persistPlan() {
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+      pendingPlanSave = pendingPlanSave.catch(() => undefined).then(() => saveSharedPlan(structuredClone(timelineData))).catch(error => console.error('Shared wedding plan could not be saved.', error));
+      return pendingPlanSave;
+    }
     function deleteInlineEvent(eventId, trigger) {
       if (trigger.dataset.confirmDelete !== 'true') {
         trigger.dataset.confirmDelete = 'true'; trigger.classList.add('confirming'); trigger.textContent = 'Confirm delete'; trigger.title = 'Click again to permanently delete';
@@ -671,6 +701,7 @@
       if (entry.isIntersecting) sectionLinks.forEach(link => link.classList.toggle('current', link.getAttribute('href') === '#' + entry.target.id));
     }), { rootMargin:'-35% 0px -55% 0px' });
     document.querySelectorAll('main section').forEach(section => observer.observe(section));
+    if (!remotePlan && sharedStore) persistPlan();
   </script>
 </body>
 </html>
