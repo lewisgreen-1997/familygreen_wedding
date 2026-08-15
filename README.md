@@ -20,3 +20,5 @@ Then open `http://localhost:8080`.
 4. For a custom domain, add the domain in GitHub Pages settings and configure its DNS with your domain provider. GitHub will create the required `CNAME` file when the domain is saved, or one can be committed here later.
 
 The site is entirely static: it has no authentication or server-side runtime. Timeline edits are stored in the browser’s local storage, so they are specific to the browser/device used to edit them.
+
+Use **Export plan data** in the timeline navigation to download the current browser plan as JSON. This is the migration path for committing the plan data to the repository.
