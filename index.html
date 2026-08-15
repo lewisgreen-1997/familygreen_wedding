@@ -323,7 +323,8 @@
       const informedIds = eventEntityIds(event.id, 'informed');
       const contacts = timelineData.entities.filter(entity => !['period', 'location'].includes(entity.type));
       const locations = timelineData.entities.filter(entity => entity.type === 'location');
-      return `<label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label>`;
+      const workstreams = ['','HMU','Music','Photography','Food & drinks','Venue & decor','Logistics','General'];
+      return `<label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Workstream<select data-inline-workstream-event-id="${event.id}">${workstreams.map(workstream => `<option value="${workstream}" ${workstream === (event.workstream || '') ? 'selected' : ''}>${workstream || 'Auto-detect'}</option>`).join('')}</select></label>`;
     }
     function renderInlineRelationControls(scope = timelineView) {
       scope.querySelectorAll('.inline-relation-actions').forEach(container => {
@@ -616,6 +617,7 @@
     timelineView.addEventListener('change', event => {
       const ownerSelect = event.target.closest('[data-inline-owner-event-id]');
       const locationSelect = event.target.closest('[data-inline-location-event-id]');
+      const workstreamSelect = event.target.closest('[data-inline-workstream-event-id]');
       if (ownerSelect) {
         const eventId = ownerSelect.dataset.inlineOwnerEventId; const detail = eventPrimaryDetail(eventId); const detailIds = detailsFor(eventId).map(item => item.id);
         timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'owner'));
@@ -626,6 +628,11 @@
         const eventId = locationSelect.dataset.inlineLocationEventId; const record = timelineData.events.find(item => item.id === eventId);
         if (record) record.locationId = locationSelect.value || undefined;
         refreshInlineEvent(eventId); persistPlan(); return;
+      }
+      if (workstreamSelect) {
+        const record = timelineData.events.find(item => item.id === workstreamSelect.dataset.inlineWorkstreamEventId);
+        if (record) record.workstream = workstreamSelect.value || undefined;
+        persistPlan(); return;
       }
       const picker = event.target.closest('[data-relationship-picker-event-id]');
       if (picker?.value) addInlineRelationship(picker.dataset.relationshipPickerEventId, picker.dataset.relationshipPickerRole, picker.value);
