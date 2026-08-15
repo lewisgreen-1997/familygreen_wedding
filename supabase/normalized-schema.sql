@@ -117,3 +117,6 @@ insert into public.wedding_decoration_items (id, wedding_id, data)
 select item->>'id', source.id, item
 from public.wedding_plan source cross join lateral jsonb_array_elements(coalesce(source.plan->'decorationItems','[]'::jsonb)) item
 on conflict (id) do nothing;
+
+-- Make the new tables available to the Supabase REST API immediately.
+notify pgrst, 'reload schema';
