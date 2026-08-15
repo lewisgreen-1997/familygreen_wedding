@@ -170,26 +170,52 @@
   <script type="module">
     const sharedStore = window.WEDDING_SUPABASE;
     const sharedHeaders = sharedStore ? { apikey: sharedStore.publishableKey, Authorization: `Bearer ${sharedStore.publishableKey}` } : null;
+    let normalisedStoreActive = false;
+    const api = async (path, options = {}) => {
+      const response = await fetch(`${sharedStore.url}/rest/v1/${path}`, { headers: { ...sharedHeaders, ...options.headers }, ...options });
+      if (!response.ok) throw new Error(`Shared store request failed (${response.status})`);
+      return response.status === 204 ? null : response.json();
+    };
+    const collectionTables = [
+      ['wedding_periods', 'periods'], ['wedding_entities', 'entities'], ['wedding_events', 'events'],
+      ['wedding_event_details', 'eventDetails'], ['wedding_relationships', 'relationships'], ['wedding_decoration_items', 'decorationItems']
+    ];
+    const relationshipRowId = relation => `relation:${relation.detailId}:${relation.entityId}:${relation.role}`;
+    const rowIdFor = (key, record) => key === 'relationships' ? relationshipRowId(record) : record.id;
+    async function loadNormalisedPlan() {
+      const metadata = await api(`wedding_metadata?id=eq.${encodeURIComponent(sharedStore.planId)}&select=data`);
+      if (!metadata?.[0]) return null;
+      const collections = await Promise.all(collectionTables.map(async ([table, key]) => [key, await api(`${table}?wedding_id=eq.${encodeURIComponent(sharedStore.planId)}&select=data`)]));
+      const plan = { wedding: metadata[0].data || {}, decorationLayouts: [] };
+      collections.forEach(([key, rows]) => { plan[key] = rows.map(row => row.data); });
+      return plan;
+    }
+    async function syncCollection(table, key, records) {
+      const desired = records.filter(Boolean).map(record => ({ id: rowIdFor(key, record), wedding_id: sharedStore.planId, data: record, updated_at: new Date().toISOString() }));
+      if (desired.length) await api(`${table}?on_conflict=id`, { method:'POST', headers:{ 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates,return=minimal' }, body:JSON.stringify(desired) });
+      const existing = await api(`${table}?wedding_id=eq.${encodeURIComponent(sharedStore.planId)}&select=id`);
+      await Promise.all(existing.filter(row => !desired.some(item => item.id === row.id)).map(row => api(`${table}?id=eq.${encodeURIComponent(row.id)}`, { method:'DELETE', headers:{ Prefer:'return=minimal' } })));
+    }
     async function loadSharedPlan() {
       if (!sharedStore) return null;
       try {
-        const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?id=eq.${encodeURIComponent(sharedStore.planId)}&select=plan`, { headers: sharedHeaders });
-        if (!response.ok) throw new Error(`Shared plan load failed (${response.status})`);
-        const [record] = await response.json();
+        const normalised = await loadNormalisedPlan();
+        if (normalised) { normalisedStoreActive = true; return normalised; }
+      } catch (error) { console.info('Normalised wedding tables are not available yet; using the current shared plan.', error); }
+      try {
+        const [record] = await api(`wedding_plan?id=eq.${encodeURIComponent(sharedStore.planId)}&select=plan`);
         return record?.plan || null;
-      } catch (error) {
-        console.warn('Using this browser\'s saved wedding plan while the shared store is unavailable.', error);
-        return null;
-      }
+      } catch (error) { console.warn('Shared plan load failed.', error); return null; }
     }
     async function saveSharedPlan(plan) {
       if (!sharedStore) return;
-      const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?on_conflict=id`, {
-        method: 'POST',
-        headers: { ...sharedHeaders, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify([{ id: sharedStore.planId, plan, updated_at: new Date().toISOString() }])
-      });
-      if (!response.ok) throw new Error(`Shared plan save failed (${response.status})`);
+      if (!normalisedStoreActive) {
+        const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?on_conflict=id`, { method:'POST', headers:{ ...sharedHeaders, 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates,return=minimal' }, body:JSON.stringify([{ id:sharedStore.planId, plan, updated_at:new Date().toISOString() }]) });
+        if (!response.ok) throw new Error(`Shared plan save failed (${response.status})`);
+        return;
+      }
+      await api('wedding_metadata?on_conflict=id', { method:'POST', headers:{ 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates,return=minimal' }, body:JSON.stringify([{ id:sharedStore.planId, data:plan.wedding, updated_at:new Date().toISOString() }]) });
+      await Promise.all(collectionTables.map(([table, key]) => syncCollection(table, key, plan[key] || [])));
     }
     async function uploadDecorationImage(file) {
       if (!file) return '';
