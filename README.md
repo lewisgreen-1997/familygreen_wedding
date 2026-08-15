@@ -21,10 +21,10 @@ Then open `http://localhost:8080`.
 
 The site is entirely static: it has no authentication or server-side runtime. Timeline edits are stored in the browser’s local storage, so they are specific to the browser/device used to edit them.
 
-The committed plan snapshot is loaded from `wedding-plan.js` when the site is first opened on a browser or device.
+The shared Supabase record is the live source of truth. The browser keeps a local copy only as an offline fallback.
 
 ## Shared live plan data
 
-The site is configured to use Supabase for a shared editable plan. Run [`supabase/schema.sql`](supabase/schema.sql) once in the Supabase SQL Editor, then open the deployed site: it will seed the shared plan from the committed snapshot and save every later edit to Supabase. The browser still keeps a local copy as an offline fallback.
+The site is configured to use Supabase for a shared editable plan. Run [`supabase/schema.sql`](supabase/schema.sql) once in the Supabase SQL Editor, then the site loads and saves the shared plan directly.
 
 This configuration intentionally allows anonymous editing, appropriate only for a small trusted group. The repository contains the publishable key only; never add a Supabase secret key to this project.

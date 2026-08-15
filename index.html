@@ -160,7 +160,6 @@
   </aside>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
   <script src="wedding-data.js"></script>
-  <script src="wedding-plan.js"></script>
   <script src="supabase-config.js"></script>
   <script type="module">
     const sharedStore = window.WEDDING_SUPABASE;
@@ -182,13 +181,13 @@
       const response = await fetch(`${sharedStore.url}/rest/v1/wedding_plan?on_conflict=id`, {
         method: 'POST',
         headers: { ...sharedHeaders, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' },
-        body: JSON.stringify({ id: sharedStore.planId, plan, updated_at: new Date().toISOString() })
+        body: JSON.stringify([{ id: sharedStore.planId, plan, updated_at: new Date().toISOString() }])
       });
       if (!response.ok) throw new Error(`Shared plan save failed (${response.status})`);
     }
     const remotePlan = await loadSharedPlan();
     const PLAN_VERSION = 'repository-plan-2026-08-15';
-    const sourcePlan = window.WEDDING_PLAN_DATA || window.WEDDING_DATA;
+    const sourcePlan = window.WEDDING_DATA;
     const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
     const shouldResetPlan = localStorage.getItem('megan-lewis-wedding-plan-version') !== PLAN_VERSION;
     const timelineData = remotePlan ? structuredClone(remotePlan) : !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(sourcePlan);
@@ -701,7 +700,6 @@
       if (entry.isIntersecting) sectionLinks.forEach(link => link.classList.toggle('current', link.getAttribute('href') === '#' + entry.target.id));
     }), { rootMargin:'-35% 0px -55% 0px' });
     document.querySelectorAll('main section').forEach(section => observer.observe(section));
-    if (!remotePlan && sharedStore) persistPlan();
   </script>
 </body>
 </html>
