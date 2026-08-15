@@ -59,6 +59,7 @@
     .person-periods { overflow:visible; } .person-period-events { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); min-width:0; } .person-period .map-event { display:grid; min-width:0; min-height:48px; padding:8px 10px; border-right:1px solid #d4e1eb; border-bottom:1px solid #d4e1eb; } .person-period .map-event span { font-size:.7rem; line-height:1.06; } .person-period .map-event time { font-size:.54rem; } @media(max-width:700px) { .person-period-events { grid-template-columns:repeat(auto-fit,minmax(138px,1fr)); } .person-period .map-event { min-height:46px; padding:7px 8px; } }
     .person-run-sheet h3 { height:44px; min-height:0 !important; align-items:center !important; } .person-period-events { display:grid; grid-template-rows:repeat(3,minmax(46px,auto)); grid-auto-flow:column; grid-auto-columns:minmax(175px,1fr); grid-template-columns:none; } .person-period .map-event { min-height:46px; padding:7px 9px; } .person-period .map-event span { font-size:.68rem; line-height:1.04; } .person-period .map-event time { font-size:.52rem; } @media(max-width:700px) { .person-period-events { grid-auto-columns:minmax(150px,1fr); } }
     .person-run-sheet { height:auto !important; min-height:0 !important; } .person-run-sheet h3 { height:40px; min-height:0 !important; padding:9px 13px !important; } .person-periods { display:flex !important; flex-direction:column; align-items:stretch !important; gap:7px; padding:7px; overflow:visible; } .person-period { display:grid !important; flex:none !important; grid-template-columns:132px minmax(0,1fr); min-height:0 !important; border:1px solid #c7d8e7; } .person-period:last-child { border-bottom:1px solid #c7d8e7; } .person-period h4 { display:flex; align-items:flex-start; min-height:0; padding:11px 10px; border-right:1px solid #c7d8e7; background:#f3f8fc; } .person-period-events { display:block !important; min-width:0 !important; min-height:0 !important; height:auto !important; } .person-period .map-event { display:grid; width:100%; min-height:36px; padding:7px 10px; grid-template-columns:74px 1fr; border-right:0; border-bottom:1px solid #d4e1eb; } .person-period .map-event:last-child { border-bottom:0; } .person-period .map-event span { font-size:.73rem; line-height:1.08; text-transform:none; letter-spacing:0; } .person-period .map-event time { font-size:.55rem; } @media(max-width:700px) { .person-period { grid-template-columns:100px minmax(0,1fr); } .person-period h4 { padding:10px 8px; } .person-period .map-event { grid-template-columns:59px 1fr; padding:7px 8px; } }
+    .decor-library-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 14px; } .decor-library { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:12px; } .decor-item { border:1px solid #c9d8e5; background:#fff; } .decor-item header { display:flex; justify-content:space-between; gap:8px; align-items:center; padding:12px 14px; border-bottom:1px solid #d9e5ee; } .decor-item h3 { margin:0; color:#365d91; } .decor-item-assignment { padding:12px 14px; border-bottom:1px solid #e2ebf2; } .decor-item-assignment:last-child { border-bottom:0; } .decor-item-assignment h4 { margin:0 0 5px; color:#527a9f; font:700 .62rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .decor-item-assignment p { margin:4px 0; font-size:.9rem; } .decor-item-assignment b { color:#527a9f; font:700 .58rem 'Manrope',Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; } .decor-item-assignment img { display:block; width:100%; max-height:150px; margin-top:9px; object-fit:cover; border:1px solid #d9e5ee; } .decor-assignment-fields { display:grid; gap:8px; margin:12px 0; padding:12px; border:1px solid #d6e3ed; background:#f8fbfd; } .decor-assignment-fields label { display:grid; gap:4px; color:#527a9f; font:700 .58rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .decor-assignment-fields select,.decor-assignment-fields input,.decor-assignment-fields textarea { width:100%; padding:7px 8px; border:1px solid #a9c2d7; font:1rem 'Cormorant Garamond',Georgia,serif; } .decor-assignment-fields textarea { min-height:62px; resize:vertical; } .decor-assignment-remove { border-color:#c9938c; color:#a34b42; }
   </style>
 </head>
 <body class="timeline-only">
@@ -188,6 +189,7 @@
     const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
     const emptyPlan = { wedding:{ date:'', venue:'', couple:'' }, periods:[], entities:[], events:[], eventDetails:[], relationships:[], decorationLayouts:[] };
     const timelineData = remotePlan ? structuredClone(remotePlan) : savedPlan ? JSON.parse(savedPlan) : emptyPlan;
+    timelineData.decorationItems ||= [];
     const timelineView = document.querySelector('#timeline-view');
     const entityById = Object.fromEntries(timelineData.entities.map(entity => [entity.id, entity]));
     const periodById = Object.fromEntries(timelineData.periods.map(period => [period.id, period]));
@@ -223,7 +225,7 @@
     }).join('');
     timelineView.innerHTML = `<span class="section-kicker">Wedding day operations · ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
     const dayline = timelineView.querySelector('.dayline');
-    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button></div>');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div>');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
     operationalMap.setAttribute('aria-live', 'polite');
@@ -271,6 +273,12 @@
         operationalMap.innerHTML = `<label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
         dayline.hidden = true; operationalMap.classList.add('active'); return;
       }
+      if (view === 'decorations') {
+        const periodName = id => periodById[id]?.name || 'Unassigned period';
+        const items = timelineData.decorationItems || [];
+        operationalMap.innerHTML = `<div class="decor-library-head"><p class="map-note">Shared decoration inventory and room-by-room assignments.</p><button type="button" data-decoration-add>+ Add decoration</button></div><div class="decor-library">${items.map(item => `<article class="decor-item"><header><h3>${item.name}</h3><button type="button" data-decoration-edit-id="${item.id}">Edit</button></header>${(item.assignments || []).map(assignment => `<div class="decor-item-assignment"><h4>${periodName(assignment.periodId)}</h4><p><b>Set up</b><br>${assignment.setup || 'To be confirmed'}</p>${assignment.movements ? `<p><b>Movement</b><br>${assignment.movements}</p>` : ''}${assignment.photoUrl ? `<img src="${assignment.photoUrl}" alt="${item.name} reference">` : ''}</div>`).join('') || '<div class="decor-item-assignment"><p>No period assignments yet.</p></div>'}</article>`).join('') || '<p class="map-note">No decoration items yet. Add items such as garlands, lanterns or table photos, then assign them to one or more periods.</p>'}</div>`;
+        dayline.hidden = true; operationalMap.classList.add('active'); return;
+      }
       const groups = new Map();
       const addToGroup = (key, event) => { if (!groups.has(key)) groups.set(key, []); groups.get(key).push(event); };
       if (view === 'workstream') events.forEach(event => addToGroup(eventWorkstream(event), event));
@@ -282,6 +290,10 @@
     timelineView.addEventListener('click', event => {
       const viewButton = event.target.closest('[data-timeline-view]');
       if (viewButton) { timelineView.querySelectorAll('[data-timeline-view]').forEach(button => button.classList.toggle('active', button === viewButton)); renderOperationalViews(viewButton.dataset.timelineView); return; }
+      const decorationAdd = event.target.closest('[data-decoration-add]');
+      if (decorationAdd) { openDecorationItemEditor(); return; }
+      const decorationEdit = event.target.closest('[data-decoration-edit-id]');
+      if (decorationEdit) { openDecorationItemEditor(decorationEdit.dataset.decorationEditId); return; }
       const mapEvent = event.target.closest('[data-map-event-id]');
       if (mapEvent) { renderOperationalViews('master'); timelineView.querySelector('[data-timeline-view="master"]')?.classList.add('active'); const card = timelineView.querySelector(`[data-event-id="${mapEvent.dataset.mapEventId}"]`); if (card) { expandEventFully(card); card.scrollIntoView({ behavior:'smooth', block:'center' }); } }
     });
@@ -386,6 +398,28 @@
     editModal.innerHTML = '<div class="edit-dialog" role="dialog" aria-modal="true"></div>';
     document.body.appendChild(editModal);
     const editDialog = editModal.querySelector('.edit-dialog');
+    const decorationAssignmentFields = assignment => `<fieldset class="decor-assignment-fields"><label>Period<select name="decorationPeriodId">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === assignment.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label>Set up<textarea name="decorationSetup" placeholder="e.g. Along the ceremony fireplace">${assignment.setup || ''}</textarea></label><label>Movement to next period<textarea name="decorationMovements" placeholder="e.g. Move to the wedding breakfast top table after the ceremony">${assignment.movements || ''}</textarea></label><label>Reference photo URL (optional)<input name="decorationPhotoUrl" type="url" value="${assignment.photoUrl || ''}" placeholder="https://…"></label><button class="decor-assignment-remove" type="button" data-remove-decoration-assignment>Remove assignment</button></fieldset>`;
+    function openDecorationItemEditor(itemId) {
+      const item = itemId ? timelineData.decorationItems.find(record => record.id === itemId) : null;
+      const assignments = item?.assignments?.length ? item.assignments : [{ periodId:timelineData.periods[0]?.id || '', setup:'', movements:'', photoUrl:'' }];
+      editDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">Decoration item</span><h2>${item ? 'Edit decoration' : 'Add decoration'}</h2><form class="edit-form" id="decoration-item-form"><label class="wide">Item name<input name="decorationName" required value="${item?.name || ''}" placeholder="e.g. Garland"></label><div id="decoration-assignment-list">${assignments.map(decorationAssignmentFields).join('')}</div><button type="button" data-add-decoration-assignment>+ Add period assignment</button><div class="form-actions"><button type="button" class="decor-close">Cancel</button><button type="submit">Save decoration</button></div></form>`;
+      editModal.hidden = false;
+      editDialog.querySelector('.decor-close').focus();
+      editDialog.querySelectorAll('.decor-close').forEach(button => button.addEventListener('click', () => { editModal.hidden = true; }));
+      const assignmentList = editDialog.querySelector('#decoration-assignment-list');
+      editDialog.querySelector('[data-add-decoration-assignment]').addEventListener('click', () => assignmentList.insertAdjacentHTML('beforeend', decorationAssignmentFields({ periodId:timelineData.periods[0]?.id || '', setup:'', movements:'', photoUrl:'' })));
+      assignmentList.addEventListener('click', event => { if (event.target.closest('[data-remove-decoration-assignment]')) { const fields = event.target.closest('.decor-assignment-fields'); if (assignmentList.children.length > 1) fields.remove(); } });
+      editDialog.querySelector('#decoration-item-form').addEventListener('submit', async formEvent => {
+        formEvent.preventDefault();
+        const form = new FormData(formEvent.currentTarget);
+        const record = item || { id:`decoration-${Date.now()}` };
+        record.name = form.get('decorationName').trim();
+        const rows = [...assignmentList.querySelectorAll('.decor-assignment-fields')];
+        record.assignments = rows.map(row => ({ id:row.dataset.assignmentId || `assignment-${Date.now()}-${Math.random().toString(36).slice(2,7)}`, periodId:row.querySelector('[name="decorationPeriodId"]').value, setup:row.querySelector('[name="decorationSetup"]').value.trim(), movements:row.querySelector('[name="decorationMovements"]').value.trim(), photoUrl:row.querySelector('[name="decorationPhotoUrl"]').value.trim() }));
+        if (!item) timelineData.decorationItems.push(record);
+        await persistPlan(); editModal.hidden = true; renderOperationalViews('decorations');
+      });
+    }
     const inputTime = value => { if (!value || value === 'TBC') return ''; const match = value.match(/(\d+):(\d+)(am|pm)/i); if (!match) return ''; let hour = Number(match[1]); const minute = match[2]; if (match[3].toLowerCase() === 'pm' && hour !== 12) hour += 12; if (match[3].toLowerCase() === 'am' && hour === 12) hour = 0; return `${String(hour).padStart(2,'0')}:${minute}`; };
     const displayTime = value => { if (!value) return 'TBC'; const [hourValue, minute] = value.split(':').map(Number); const suffix = hourValue >= 12 ? 'pm' : 'am'; const hour = hourValue % 12 || 12; return `${hour}:${String(minute).padStart(2,'0')}${suffix}`; };
     const sortTime = value => { if (!value) return 9999; const [hour, minute] = value.split(':').map(Number); return hour * 100 + minute; };
