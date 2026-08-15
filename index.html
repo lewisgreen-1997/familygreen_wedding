@@ -527,7 +527,13 @@
         timelineData.relationships.push({ detailId, entityId:`period-${updated.periodId}`, role:'period' });
         if (form.get('ownerId')) timelineData.relationships.push({ detailId, entityId:form.get('ownerId'), role:'owner' });
         form.getAll('informedIds').forEach(entityId => timelineData.relationships.push({ detailId, entityId, role:'informed' }));
-        await persistPlan(); window.location.reload();
+        try {
+          await persistPlan();
+          window.location.reload();
+        } catch (error) {
+          console.error('Event could not be saved.', error);
+          alert(`Event could not be saved: ${error.message}`);
+        }
       });
     }
     async function deleteEvent(eventId) { if (!confirm('Delete this event and its detail records?')) return; const detailIds = timelineData.eventDetails.filter(detail => detail.eventId === eventId).map(detail => detail.id); timelineData.events = timelineData.events.filter(event => event.id !== eventId); timelineData.eventDetails = timelineData.eventDetails.filter(detail => detail.eventId !== eventId); timelineData.relationships = timelineData.relationships.filter(relation => !detailIds.includes(relation.detailId)); await persistPlan(); window.location.reload(); }
@@ -562,7 +568,7 @@
     let pendingPlanSave = Promise.resolve();
     function persistPlan() {
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
-      pendingPlanSave = pendingPlanSave.catch(() => undefined).then(() => saveSharedPlan(structuredClone(timelineData))).catch(error => console.error('Shared wedding plan could not be saved.', error));
+      pendingPlanSave = pendingPlanSave.catch(() => undefined).then(() => saveSharedPlan(structuredClone(timelineData)));
       return pendingPlanSave;
     }
     function deleteInlineEvent(eventId, trigger) {

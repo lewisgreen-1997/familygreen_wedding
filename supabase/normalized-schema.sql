@@ -109,9 +109,16 @@ from public.wedding_plan source cross join lateral jsonb_array_elements(coalesce
 on conflict (id) do nothing;
 
 insert into public.wedding_relationships (id, wedding_id, data)
-select md5(coalesce(item->>'detailId','') || '|' || coalesce(item->>'entityId','') || '|' || coalesce(item->>'role','')), source.id, item
+select 'relation:' || coalesce(item->>'detailId','') || ':' || coalesce(item->>'entityId','') || ':' || coalesce(item->>'role',''), source.id, item
 from public.wedding_plan source cross join lateral jsonb_array_elements(coalesce(source.plan->'relationships','[]'::jsonb)) item
 on conflict (id) do nothing;
+
+-- Align records created by the first migration with the IDs the site uses for
+-- newly-created relationships. This is safe because each detail/entity/role
+-- combination is unique in the wedding plan.
+update public.wedding_relationships
+set id = 'relation:' || coalesce(data->>'detailId','') || ':' || coalesce(data->>'entityId','') || ':' || coalesce(data->>'role','')
+where id not like 'relation:%';
 
 insert into public.wedding_decoration_items (id, wedding_id, data)
 select item->>'id', source.id, item
