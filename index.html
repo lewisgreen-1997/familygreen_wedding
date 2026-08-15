@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#35463c">
+  <title>Lewis & Megan — 22 August 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#172d56; --pine:#193765; --cream:#f7f8fb; --paper:#ffffff; --sand:#dce5ec; --gold:#6f92b6; --muted:#60728d; --line:#d5e0e9; --rose:#8eafc4; }
+    * { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:'Cormorant Garamond', Georgia, serif; color:var(--ink); background:radial-gradient(circle at top right,#ffffff 0,transparent 34%),var(--cream); line-height:1.5; }
+    .hero { position:relative; overflow:hidden; min-height:420px; display:grid; place-items:center; text-align:center; padding:48px 24px; color:#fffdf7; background-image:linear-gradient(90deg,rgba(10,31,68,.88),rgba(15,44,87,.65) 48%,rgba(25,46,83,.31)),url('CoverImage.jpg'); background-size:cover; background-position:center 44%; } .hero:before { content:''; position:absolute; z-index:0; inset:17px; border:1px solid #d7e5f266; pointer-events:none; } .hero>div { position:relative; z-index:1; }
+    .eyebrow { text-transform:uppercase; letter-spacing:.22em; font:700 .73rem/1 'Manrope',Arial,sans-serif; } h1 { font-family:'Great Vibes','Cormorant Garamond',cursive; font-size:clamp(4rem,8vw,6.6rem); font-weight:400; line-height:.76; margin:.32em 0 .24em; text-shadow:0 3px 18px #071a3fb8; } .hero p { font-size:1.2rem; margin:.35rem 0; } .hero .date { color:#d6e6f4; letter-spacing:.1em; }
+    nav { position:sticky; top:0; z-index:1000; isolation:isolate; display:flex; gap:4px; overflow:visible; padding:9px max(22px,calc((100vw - 1120px)/2)); background:#fffdf8ee; border-bottom:1px solid var(--line); backdrop-filter:blur(9px); font:600 .77rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.08em; } nav a { color:var(--pine); text-decoration:none; white-space:nowrap; } nav a:hover,nav a.current { color:var(--gold); } .nav-group { position:relative; z-index:1; flex:none; } .nav-group[open] { z-index:1001; } .nav-group summary { list-style:none; cursor:pointer; padding:8px 11px; color:var(--pine); white-space:nowrap; } .nav-group summary::-webkit-details-marker { display:none; } .nav-group summary:after { content:'+'; margin-left:7px; color:var(--gold); } .nav-group[open] summary:after { content:'−'; } .subnav { position:absolute; z-index:1002; left:0; top:100%; width:210px; padding:7px; background:var(--paper); border:1px solid var(--line); box-shadow:0 12px 30px #26332c2b; } .subnav a { display:block; padding:9px 10px; font-size:.7rem; } .subnav a:hover { background:var(--sand); }
+    main { width:min(1120px,calc(100% - 40px)); margin:0 auto; } section { padding:78px 0 14px; } .section-kicker { color:var(--gold); font:600 .73rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.16em; } h2 { font-size:clamp(2rem,4vw,3.2rem); font-weight:400; line-height:1; margin:.25rem 0 1.6rem; } h3 { font-size:1.1rem; font-weight:normal; margin:.2rem 0 .65rem; }
+    .intro { max-width:660px; font-size:1.2rem; } .facts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:30px; } .fact,.card { background:var(--paper); border:1px solid var(--line); border-radius:3px; padding:22px; } .fact b { display:block; color:var(--gold); font:600 .69rem Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px; }
+    .timeline { border-left:1px solid var(--gold); margin-left:9px; padding-left:26px; } .event { position:relative; display:grid; grid-template-columns:92px 1fr; gap:20px; padding:0 0 23px; } .event:before { content:''; position:absolute; left:-32px; top:5px; width:10px; height:10px; border-radius:50%; border:2px solid var(--gold); background:var(--cream); } .event time { color:var(--gold); font:600 .82rem Arial,sans-serif; } .event p { margin:3px 0 0; color:var(--muted); font-size:.96rem; } .location { display:inline-block; margin-top:7px; color:var(--pine); font:600 .7rem Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; }
+    .filterbar { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px; } button { border:1px solid var(--pine); color:var(--pine); background:transparent; padding:8px 13px; font:600 .72rem Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } button.active,button:hover { background:var(--pine); color:white; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; } .menu-card { border-top:4px solid var(--gold); } .menu-card ul { list-style:none; padding:0; margin:0; } .menu-card li { padding:8px 0; border-bottom:1px solid var(--line); font-size:.95rem; } .note { font-size:.9rem; color:var(--muted); }
+    .seating { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; } .table { background:var(--paper); border:1px solid var(--line); padding:19px; min-height:180px; } .table .number { color:var(--gold); font:600 .68rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.12em; } .names { margin-top:11px; columns:2; font-size:.95rem; } .names span { display:block; margin:2px 0; } .seat-note { background:#ede3d4; padding:17px 20px; margin:18px 0 0; }
+    .suppliers { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; border:1px solid var(--line); background:var(--line); } .supplier { background:var(--paper); padding:18px 20px; } .supplier small { display:block; color:var(--gold); font:600 .67rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.11em; } a { color:var(--pine); } .details { display:grid; grid-template-columns:1.15fr .85fr; gap:16px; } .map-link { display:inline-block; margin-top:12px; font:600 .74rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.08em; }
+    .gallery-shell { overflow:hidden; background:var(--paper); border:1px solid var(--line); box-shadow:0 8px 24px #26332c13; } .gallery-head { display:flex; justify-content:space-between; align-items:center; gap:18px; padding:18px 21px; border-bottom:1px solid var(--line); } .gallery-head p { margin:0; font-size:.9rem; color:var(--muted); } .drive-gallery { display:block; width:100%; height:620px; border:0; background:#f5f2ea; } .open-drive { white-space:nowrap; }
+    .placeholder-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; } .placeholder { min-height:244px; display:flex; flex-direction:column; justify-content:flex-end; padding:23px; background:linear-gradient(150deg,#f2ebdf,#fffdf8); border:1px dashed #c9af8a; position:relative; overflow:hidden; } .placeholder:before { content:attr(data-icon); position:absolute; right:18px; top:10px; color:#d4bd9a; font-size:4.5rem; line-height:1; } .placeholder .tag { color:var(--gold); font:600 .66rem Arial,sans-serif; letter-spacing:.13em; text-transform:uppercase; } .placeholder h3 { font-size:1.35rem; margin:7px 0 5px; } .placeholder p { color:var(--muted); font-size:.92rem; margin:0; max-width:245px; } .placeholder.single { min-height:180px; }
+    .phase-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:28px; } .phase { display:flex; flex-direction:column; min-height:200px; padding:18px; background:var(--paper); border:1px solid var(--line); transition:transform .18s,box-shadow .18s; } .phase:hover { transform:translateY(-3px); box-shadow:0 8px 20px #26332c18; } .phase-no { color:var(--gold); font:600 .67rem Arial,sans-serif; letter-spacing:.12em; } .phase h3 { margin:12px 0 4px; font-size:1.06rem; } .phase p { margin:0; color:var(--muted); font-size:.82rem; } .phase-links { margin-top:auto; padding-top:13px; display:flex; flex-wrap:wrap; gap:8px; } .phase-links a { color:var(--pine); font:600 .67rem Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; } .phase-links a:hover { color:var(--gold); } .contact-card { margin-top:16px; display:flex; gap:26px; align-items:center; padding:18px 21px; background:#ede3d4; } .contact-card h3 { margin:0; } .contact-card p { margin:0; font-size:.92rem; } .contact-card a { font-weight:bold; }
+    .role-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; } .role-card { min-height:190px; padding:20px; text-align:left; border:1px solid var(--line); background:var(--paper); color:var(--ink); } .role-card:hover,.role-card.active { background:var(--pine); border-color:var(--pine); color:white; } .role-card .role-icon { display:block; color:var(--gold); font-size:1.5rem; margin-bottom:25px; } .role-card h3 { margin:0 0 5px; font-size:1.05rem; } .role-card p { margin:0; color:var(--muted); font:normal .85rem/1.45 Georgia,serif; } .role-card:hover p,.role-card.active p { color:#e4e0d8; } .role-panel { display:none; margin-top:14px; padding:24px; background:#ede3d4; border-left:4px solid var(--gold); } .role-panel.visible { display:block; } .role-panel h3 { font-size:1.45rem; margin:0 0 6px; } .role-panel p { margin:0 0 15px; color:var(--muted); } .role-links { display:flex; flex-wrap:wrap; gap:9px; } .role-links a { padding:8px 10px; border:1px solid #bfa47c; color:var(--pine); text-decoration:none; font:600 .68rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.06em; } .role-links a:hover { background:var(--pine); color:white; }
+    .now-bar { position:fixed; z-index:18; left:18px; bottom:18px; max-width:min(580px,calc(100vw - 150px)); display:flex; gap:13px; align-items:center; padding:11px 15px; background:var(--pine); color:#fffdf8; box-shadow:0 8px 24px #26332c44; font-size:.87rem; } .now-bar b { flex:none; color:#e8cb9e; font:600 .65rem Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; } .now-bar span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .timeline-only nav,.timeline-only .explore,.timeline-only .quick-nav,.timeline-only .now-bar,.timeline-only main > section:not(#timeline-view) { display:none; } .timeline-only main { width:min(960px,calc(100% - 40px)); } .timeline-only .hero { min-height:300px; } .timeline-only #timeline-view { display:block; padding-top:48px; } .timeline-only #timeline-view h2 { font-size:clamp(2.6rem,6vw,4.5rem); margin-bottom:.55rem; } .timeline-only #timeline-view .intro { font-size:1.08rem; max-width:720px; } .dayline { position:relative; padding:4px 0 18px 154px; } .dayline:before { content:''; position:absolute; left:116px; top:15px; bottom:0; width:1px; background:#d1b281; } .time-point { position:relative; display:block; margin:var(--gap,11px) 0 0; background:var(--paper); border:1px solid var(--line); cursor:pointer; transition:.18s ease; } .time-point:hover,.time-point[open] { border-color:#c7a16c; box-shadow:0 7px 18px #26332c13; } .time-point:before { content:''; position:absolute; width:11px; height:11px; left:-44px; top:20px; border-radius:50%; border:3px solid var(--gold); background:var(--cream); } .time-point summary { position:relative; display:block; list-style:none; min-height:67px; padding:15px 228px 15px 22px; } .time-point summary::-webkit-details-marker { display:none; } .time-point summary:after { content:'+'; position:absolute; right:19px; top:13px; color:var(--gold); font:1.35rem Arial,sans-serif; } .time-point[open] summary:after { content:'−'; } .event-time { position:absolute; right:calc(100% + 59px); top:18px; width:82px; text-align:right; color:#a86f23; font:600 .76rem Arial,sans-serif; letter-spacing:.02em; } .event-time.tbc { font-size:.64rem; letter-spacing:.09em; text-transform:uppercase; } .event-title { display:block; font-size:1.12rem; } .event-location-pill,.event-owner-pill { display:inline-block; margin-top:7px; padding:4px 7px; border:1px solid var(--line); color:var(--pine); font:600 .62rem Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; } .event-location-pill { background:#f7f2e9; } .event-owner-wrap { position:absolute; top:14px; right:88px; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:5px; max-width:155px; } .event-owner-pill { margin:0; border-color:#b58a51; background:#fff9ef; } .event-detail { padding:0 22px 20px; color:var(--muted); font-size:.94rem; } .event-detail p { margin:0; } .event-detail strong { color:var(--pine); } .time-point.major { border-left:4px solid var(--pine); background:#fffefa; } .time-point.major:before { background:var(--pine); } .timeline-key { display:flex; gap:16px; margin:0 0 22px; color:var(--muted); font-size:.82rem; } .timeline-key b { color:var(--pine); } .period-marker { position:relative; margin:30px 0 13px; min-height:20px; color:var(--pine); font:600 .7rem Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase; } .period-marker:first-child { margin-top:2px; } .period-marker:before { content:''; position:absolute; left:-154px; right:0; top:50%; height:1px; background:var(--sand); } .period-marker span { position:relative; z-index:1; display:inline-block; padding-right:13px; background:var(--cream); } .sub-events { margin-top:15px; border-top:1px solid var(--line); } .sub-event { border-bottom:1px solid var(--line); } .sub-event summary { list-style:none; position:relative; padding:13px 30px 13px 0; cursor:pointer; color:var(--pine); font-weight:bold; } .sub-event summary::-webkit-details-marker { display:none; } .sub-event summary:after { content:'+'; position:absolute; right:2px; color:var(--gold); font:1.15rem Arial,sans-serif; } .sub-event[open] summary:after { content:'−'; } .sub-event p { margin:0; padding:0 0 14px; color:var(--muted); font-size:.9rem; } .sub-event .sub-label { display:block; margin-bottom:2px; color:var(--gold); font:600 .64rem Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; }
+    .related { display:inline-flex; align-items:center; gap:4px; margin:9px 5px 0 0; padding:4px 7px; border:1px solid var(--line); background:transparent; color:var(--pine); font:600 .63rem Arial,sans-serif; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; } .related:hover { background:var(--pine); color:white; } .entity-icon { width:13px; height:13px; stroke-width:1.8; vertical-align:-2px; } .event-owner-pill .entity-icon,.event-location-pill .entity-icon { width:12px; height:12px; } .entity-view { margin:0 0 20px; padding:18px 20px; background:#ede3d4; border-left:4px solid var(--gold); } .entity-view[hidden] { display:none; } .entity-view h3 { margin:0 0 5px; } .entity-view p { margin:0 0 10px; color:var(--muted); font-size:.9rem; } .entity-view ul { margin:0; padding-left:18px; font-size:.9rem; } .entity-view li { margin:6px 0; } .clear-view { float:right; padding:4px 7px; font-size:.62rem; }
+    .period-marker { padding:0; border:0; width:100%; background:transparent; font:inherit; text-align:left; cursor:pointer; } .period-marker:after { content:'View decoration setup ↗'; position:relative; z-index:1; margin-left:9px; color:var(--gold); font:600 .63rem Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; } .period-marker:hover span { color:var(--gold); } .decor-modal { position:fixed; z-index:2000; inset:0; display:grid; place-items:center; padding:24px; background:#26332c88; } .decor-modal[hidden] { display:none; } .decor-dialog { width:min(760px,100%); max-height:min(760px,calc(100vh - 48px)); overflow:auto; padding:32px; background:var(--paper); box-shadow:0 24px 70px #1118; } .decor-dialog h2 { margin:.25rem 0 .5rem; font-size:clamp(2rem,4vw,3.1rem); } .decor-dialog p { color:var(--muted); } .decor-close { float:right; border-color:var(--line); } .decor-list { padding-left:20px; } .decor-list li { margin:8px 0; } .asset-slots { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:24px; } .asset-slot { min-height:105px; display:grid; place-items:center; padding:12px; border:1px dashed #c9af8a; color:var(--gold); text-align:center; font:600 .65rem Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .decor-location { display:inline-flex; align-items:center; gap:5px; margin:7px 0 14px; padding:5px 8px; background:#f7f2e9; border:1px solid var(--line); color:var(--pine); font:600 .68rem Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; }
+    .event-actions { position:absolute; top:13px; right:50px; display:flex; gap:3px; } .event-edit-icon { display:grid; place-items:center; width:27px; height:27px; padding:0; border:0; background:transparent; color:#698cab; cursor:pointer; } .event-edit-icon:hover { color:var(--pine); background:#edf4fa; } .event-edit-icon svg { width:14px; height:14px; } .event-save,.event-cancel { display:none; } .inline-editing { outline:2px solid #a9c4da; outline-offset:2px; } .inline-editing .event-edit-icon { display:none; } .inline-editing .event-save,.inline-editing .event-cancel { display:grid; } .inline-editing [data-inline-field] { outline:1px dashed #8cabc5; outline-offset:3px; border-radius:2px; cursor:text; } .inline-editing [data-inline-field]:focus { outline:2px solid #668dad; background:#f0f7fc; } .inline-editing [data-inline-field="time"] { cursor:pointer; } .inline-editing .event-detail { background:#fbfdff; } .relation-remove,.inline-relation-actions { display:none; } .inline-editing .relation-remove,.inline-editing .inline-relation-actions { display:flex; } .relation-remove { align-items:center; justify-content:center; width:16px; height:16px; margin-left:-4px; padding:0; border:1px solid #a9c2d7; border-radius:50%; background:#fff; color:#6387a8; font-size:.7rem; cursor:pointer; } .inline-relation-actions { flex-wrap:wrap; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid #d5e0e9; } .inline-relation-field { display:grid; gap:4px; min-width:142px; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .inline-relation-field select,.inline-record-widget input,.inline-record-widget select { min-height:29px; padding:5px 7px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:600 .72rem 'Manrope',Arial,sans-serif; text-transform:none; letter-spacing:0; } .inline-relation-field select[multiple] { min-height:74px; } .apply-informed { align-self:end; padding:6px 8px; font-size:.59rem; } .inline-record-widget { display:flex; align-items:end; flex-wrap:wrap; gap:6px; width:100%; padding:10px; border:1px dashed #a9c2d7; background:#f6fafc; } .inline-record-widget > span { width:100%; color:#527a9f; font:700 .58rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .inline-record-widget label { display:grid; gap:4px; color:#527a9f; font:700 .55rem 'Manrope',Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; } .inline-record-widget input { min-width:190px; } .inline-record-widget button { padding:6px 8px; font-size:.59rem; } .relation-picker { min-width:155px; padding:5px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:600 .65rem 'Manrope',Arial,sans-serif; } .time-edit-modal { position:fixed; z-index:3000; inset:0; display:grid; place-items:center; padding:20px; background:#102b4b66; } .time-edit-dialog { width:min(310px,100%); padding:22px; border:1px solid #9fb9cf; background:#fffefa; box-shadow:0 18px 55px #102b4b55; } .time-edit-dialog h3 { margin:0 0 14px; color:var(--pine); } .time-edit-dialog label { display:grid; gap:6px; color:#527a9f; font:700 .62rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .time-edit-dialog input { padding:9px; border:1px solid #a9c2d7; font:1rem Georgia,serif; } .time-edit-actions { display:flex; justify-content:flex-end; gap:7px; margin-top:16px; } .time-edit-actions button { padding:7px 9px; font-size:.62rem; } .period-add { position:relative; z-index:1; margin-left:auto; padding:6px 8px; border:1px solid #c6d5e2; background:var(--cream); color:#527a9f; font:700 .61rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .period-add:hover { background:#eef5fa; } .edit-modal { position:fixed; z-index:2100; inset:0; display:grid; place-items:center; padding:24px; background:#26332c88; } .edit-modal[hidden] { display:none; } .edit-dialog { width:min(740px,100%); max-height:calc(100vh - 48px); overflow:auto; padding:30px; background:var(--paper); box-shadow:0 24px 70px #1118; } .edit-dialog h2 { margin:.25rem 0 18px; } .edit-form { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; } .edit-form label { display:grid; gap:6px; color:var(--pine); font:600 .68rem Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .edit-form input,.edit-form select,.edit-form textarea { width:100%; padding:9px; border:1px solid var(--line); background:#fffefa; color:var(--ink); font:1rem Georgia,serif; } .edit-form textarea { min-height:90px; resize:vertical; } .edit-form .wide { grid-column:1/-1; } .edit-form select[multiple] { min-height:115px; } .edit-form .check { display:flex; align-items:center; gap:8px; } .edit-form .check input { width:auto; } .sequence-step-fields { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; grid-column:1/-1; } .sequence-step-fields[hidden] { display:none; } .informed-field { display:grid; align-content:start; gap:7px; } .informed-field .add-contact { justify-self:start; padding:6px 8px; font-size:.62rem; } .form-actions { grid-column:1/-1; display:flex; gap:8px; justify-content:flex-end; margin-top:4px; } .form-delete { margin-right:auto; color:#8b3528; border-color:#b66e62; }
+    footer { text-align:center; padding:70px 20px 35px; color:var(--muted); font-size:.85rem; } .private { font:600 .67rem Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); }
+    .explore { position:fixed; right:22px; bottom:22px; z-index:20; border-radius:99px; border:0; box-shadow:0 8px 24px #26332c44; background:var(--pine); color:white; padding:13px 18px; } .explore[aria-expanded="true"] { background:var(--gold); } .quick-nav { position:fixed; z-index:19; right:22px; bottom:73px; width:min(235px,calc(100vw - 44px)); padding:9px; background:var(--paper); border:1px solid var(--line); box-shadow:0 12px 36px #26332c33; transform:translateY(8px); opacity:0; visibility:hidden; transition:.18s ease; } .quick-nav.open { transform:translateY(0); opacity:1; visibility:visible; } .quick-nav a { display:block; padding:11px 12px; color:var(--pine); text-decoration:none; font:600 .75rem Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .quick-nav a:hover { background:var(--sand); }
+    @media(max-width:700px) { .hero{min-height:465px}.facts,.grid,.seating,.details,.placeholder-grid,.phase-grid,.role-grid { grid-template-columns:1fr; } .event { grid-template-columns:70px 1fr; gap:12px; } .names { columns:3; } section { padding-top:60px; } .contact-card { display:block; } .contact-card p { margin-top:8px; } .now-bar { left:12px; bottom:12px; max-width:calc(100vw - 105px); } .timeline-only .hero { min-height:250px; } .timeline-only #timeline-view { padding-top:38px; } .dayline { padding-left:96px; } .dayline:before { left:66px; } .time-point:before { left:-36px; } .sequence-step:before { left:-50px; } .event-time { right:calc(100% + 47px); width:58px; font-size:.66rem; } .period-marker:before { left:-96px; } .time-point summary { padding-right:45px; } .event-owner-wrap { position:static; display:block; max-width:none; margin-top:7px; } }
+    /* Blue floral stationery finish from the wedding reference cards */
+    .section-kicker,.event-time,.event-location-pill,.event-owner-pill,.related,.period-marker,.timeline-controls button,.edit-form label,.asset-slot,.decor-location { font-family:'Manrope',Arial,sans-serif; }
+    .timeline-only #timeline-view h2 { letter-spacing:-.025em; } .timeline-only #timeline-view .intro { font-size:1.23rem; color:#46594f; }
+    .timeline-key { padding:10px 0 15px; border-bottom:1px solid var(--sand); } .timeline-key span:first-child { color:var(--pine); }
+    .dayline:before { background:#a8bdd0; } .time-point:before { border-color:#7d9dbb; background:#f7f8fb; } .event-time { color:#5078a0; }
+    .period-group { position:relative; padding:0; margin:32px 0 0; } .period-header { position:relative; display:flex; align-items:center; gap:12px; min-height:28px; margin:0 0 14px; } .period-header:before { content:''; position:absolute; z-index:0; left:-154px; right:0; top:50%; height:1px; background:var(--sand); } .period-toggle { position:relative; z-index:1; padding:3px 11px 3px 0; border:0; background:var(--cream); color:var(--pine); font:700 .78rem 'Manrope',Arial,sans-serif; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; } .period-toggle:before { content:'−'; display:inline-block; width:20px; color:#7395b7; font-size:1rem; } .period-group.collapsed .period-toggle:before { content:'+'; } .period-decor { position:relative; z-index:1; margin-left:auto; padding:6px 9px; border:1px solid #b8cce0; background:var(--cream); color:#527a9f; font:700 .61rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .period-decor:hover { background:#eef5fa; } .period-group.collapsed .period-events { display:none; } .period-group.collapsed { margin:10px 0 0; } .period-group.collapsed .period-header { margin:0; min-height:26px; }
+    .sequence-root { border-left-width:5px; } .sequence-step { margin-left:28px; border-left:2px solid #aac2d6; background:#fbfdff; } .sequence-step:before { left:-58px; width:8px; height:8px; border-width:2px; border-color:#91acc5; background:#f7f8fb; } .sequence-label { display:inline-block; margin-left:8px; color:#7695af; font:700 .58rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; vertical-align:middle; }
+    @media(max-width:700px) { .period-header:before { left:-96px; } .period-header { gap:6px; } .period-toggle { font-size:.68rem; letter-spacing:.09em; } .period-decor { padding:5px 6px; font-size:.54rem; letter-spacing:.03em; } }
+    .time-point { border-color:#d8e2eb; border-radius:1px; background:linear-gradient(110deg,#ffffff,#fbfcfe); } .time-point:hover,.time-point[open] { border-color:#92b1cc; box-shadow:0 12px 30px #203c6b16; }
+    .time-point.major { background:linear-gradient(110deg,#ffffff,#f3f8fc); border-left-color:#6f91ba; } .time-point.major:before { background:#365d91; border-color:#d7e7f2; }
+    .event-title { font-size:1.28rem; font-weight:600; } .event-location-pill,.event-owner-pill { border-radius:99px; letter-spacing:.035em; } .event-owner-pill { background:#edf4fa; border-color:#a4bdd2; } .event-location-pill { background:#f2f7fa; border-color:#c7d8e5; }
+    .period-marker { color:var(--pine); } .period-marker span { padding:4px 10px 4px 0; font-weight:700; } .period-marker:after { color:#7395b6; }
+    .sub-event .sub-label { color:#6f92b6; } .sub-event summary { font-size:1.02rem; } .related { border-radius:99px; background:#f8fbfd; border-color:#c9d8e5; } .related:hover { background:var(--pine); }
+    .decor-dialog,.edit-dialog { border:1px solid #d4e0ea; border-top:4px solid #7399bb; } .edit-form input,.edit-form select,.edit-form textarea { font-family:'Cormorant Garamond',Georgia,serif; font-size:1.12rem; } button { font-family:'Manrope',Arial,sans-serif; }
+    .event-delete { display:none; color:#a34b42; } .inline-editing .event-delete { display:grid; } .event-delete.confirming { width:auto; padding:0 7px; border:1px solid #b86b61; background:#fff8f6; font:700 .58rem 'Manrope',Arial,sans-serif; letter-spacing:.04em; text-transform:uppercase; } .inline-editing .inline-relation-actions { display:grid; grid-template-columns:minmax(180px,360px); justify-content:start; } .informed-choice-list { display:grid; gap:3px; max-height:112px; overflow:auto; padding:6px; border:1px solid #a9c2d7; background:#fff; } .informed-choice-list label { display:flex; align-items:center; gap:5px; color:var(--pine); font:600 .66rem 'Manrope',Arial,sans-serif; letter-spacing:0; text-transform:none; } .informed-choice-list input { width:auto; margin:0; } .sequence-step-fields { grid-template-columns:1fr; } .sequence-step-fields label:last-child { display:none; } .sequence-root { box-shadow:inset 4px 0 #5078a0; } .sequence-step { margin-left:20px; border-left-width:3px; } .sequence-step:before { left:-58px; z-index:2; } .sequence-step:after { content:''; position:absolute; z-index:1; left:-52px; top:26px; width:51px; border-top:2px solid #91acc5; } .sequence-step summary { padding-left:18px; } @media(max-width:700px) { .sequence-step:after { left:-44px; width:43px; } }
+    .sequence-step { overflow:visible; } .sequence-step:after { border-top-width:2px; box-shadow:0 0 0 3px #f7f9fc; } .series-flow-row { display:flex; align-items:center; gap:5px; width:max-content; margin:7px 0 -2px; padding:3px 6px; border:1px solid #c4d5e3; border-radius:999px; background:#f1f6fa; color:#597e9f; font:700 .54rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .series-flow-row svg { width:11px; height:11px; stroke-width:2.2; } .sequence-root summary { box-shadow:inset 4px 0 #5078a0; } .sequence-root[open] summary { box-shadow:inset 4px 0 #365d91; }
+    .view-switcher { display:flex; flex-wrap:wrap; gap:7px; margin:22px 0 14px; } .view-switcher button { padding:8px 10px; border:1px solid #a9c2d7; background:#fff; color:#527a9f; font:700 .62rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .view-switcher button.active { border-color:#365d91; background:#365d91; color:#fff; } .operational-map { display:none; margin-top:4px; } .operational-map.active { display:block; } .map-note { margin:0 0 13px; color:#60798e; font-size:.86rem; } .map-lanes { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; align-items:start; } .map-lane { min-height:116px; border:1px solid #c9d8e5; background:linear-gradient(180deg,#f8fbfe,#fff); } .map-lane h3 { margin:0; padding:10px 12px; border-bottom:1px solid #d9e5ee; color:#365d91; font:700 .68rem 'Manrope',Arial,sans-serif; letter-spacing:.09em; text-transform:uppercase; } .map-event { display:grid; grid-template-columns:48px 1fr; gap:7px; width:100%; padding:9px 11px; border:0; border-bottom:1px solid #e2ebf2; background:transparent; color:var(--pine); text-align:left; cursor:pointer; } .map-event:hover { background:#eef5fa; } .map-event time { color:#6688a7; font:700 .61rem 'Manrope',Arial,sans-serif; } .map-event span { font:600 .79rem Georgia,serif; } .person-picker { display:grid; gap:6px; width:min(320px,100%); margin:0 auto 12px; color:#527a9f; font:700 .61rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .person-picker select { padding:8px 9px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:600 .82rem Georgia,serif; } .person-run-sheet { width:min(320px,100%); margin:0 auto; border:1px solid #b9cde0; background:#fff; } .person-run-sheet h3 { min-height:52px; display:flex; align-items:center; margin:0; padding:12px 14px; border-bottom:1px solid #c7d8e7; color:#00458b; font:700 .7rem 'Manrope',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; } .person-run-sheet .map-event { grid-template-columns:61px 1fr; padding:10px 13px; border-bottom-color:#cbdbea; } .person-run-sheet .map-event time { color:#276899; font-size:.61rem; text-transform:uppercase; } .person-run-sheet .map-event span { color:#003c7a; font:700 .84rem Georgia,serif; letter-spacing:.045em; line-height:1.1; text-transform:uppercase; } @media(max-width:700px) { .map-lanes { grid-template-columns:1fr; } .person-run-sheet h3 { min-height:48px; } }
+    .time-point:not([open]) summary { min-height:46px; padding:9px 184px 9px 18px; } .time-point:not([open]) summary:after { top:6px; } .time-point:not([open]) .event-time { top:12px; } .time-point:not([open]) .event-title { font-size:1rem; line-height:1.35; } .time-point:not([open]) .event-location-pill { display:none; } .time-point:not([open]) .event-owner-wrap { top:8px; } .time-point:not([open]) .event-owner-pill { padding:3px 6px; } .time-point:not([open]) { box-shadow:none; } @media(max-width:700px) { .time-point:not([open]) summary { padding:9px 42px 9px 16px; min-height:44px; } .time-point:not([open]) .event-time { top:12px; } }
+    .series-themed.sequence-root { border-left-color:var(--series-color); } .series-themed.sequence-root summary { box-shadow:inset 4px 0 var(--series-color); } .series-themed.sequence-root:before { background:var(--series-color); border-color:var(--series-tint); } .series-themed.sequence-step { border-left-color:var(--series-color); background:linear-gradient(90deg,var(--series-tint),#fff 42%); } .series-themed.sequence-step:before { border-color:var(--series-color); background:var(--series-tint); } .series-themed.sequence-step:after { border-color:var(--series-color); } 
+    .person-run-sheet { width:min(1080px,100%); } .person-run-sheet h3 { min-height:44px; padding:11px 14px; } .person-periods { display:flex; overflow-x:auto; align-items:stretch; } .person-period { flex:0 0 min(270px,82vw); border-right:1px solid #c7d8e7; } .person-period:last-child { border-right:0; } .person-period h4 { margin:0; padding:10px 13px; border-bottom:1px solid #c7d8e7; background:#f3f8fc; color:#46769e; font:700 .6rem 'Manrope',Arial,sans-serif; letter-spacing:.09em; text-transform:uppercase; } .person-period .map-event { grid-template-columns:58px 1fr; min-height:50px; padding:10px 12px; } .person-period .map-event span { font-size:.79rem; letter-spacing:.035em; } .person-period .map-event time { font-size:.58rem; } @media(max-width:700px) { .person-run-sheet { width:100%; } .person-period { flex-basis:82vw; } }
+    .owner-themed.time-point { border-color:var(--owner-color); background:linear-gradient(90deg,var(--owner-tint),#fff 36%); } .owner-themed.time-point:before { border-color:var(--owner-color); background:var(--owner-tint); } .owner-themed.time-point.major:before { background:var(--owner-color); } .owner-themed .event-owner-pill { border-color:var(--owner-color); background:var(--owner-tint); } .owner-themed.sequence-root { border-left-color:var(--owner-color); } .owner-themed.sequence-root summary { box-shadow:inset 4px 0 var(--owner-color); } .owner-themed.sequence-step { border-left-color:var(--owner-color); background:linear-gradient(90deg,var(--owner-tint),#fff 42%); } .owner-themed.sequence-step:before { border-color:var(--owner-color); background:var(--owner-tint); } .owner-themed.sequence-step:after { border-color:var(--owner-color); }
+    .person-run-sheet { width:min(1080px,100%); } .person-run-sheet h3 { min-height:42px !important; padding:11px 14px !important; } .person-periods { display:grid; overflow-x:auto; } .person-period { display:grid; grid-template-columns:148px minmax(0,1fr); border-right:0; border-bottom:1px solid #c7d8e7; } .person-period:last-child { border-bottom:0; } .person-period h4 { display:flex; align-items:center; min-height:62px; margin:0; padding:11px 13px; border-right:1px solid #c7d8e7; border-bottom:0; background:#f3f8fc; } .person-period-events { display:flex; min-width:max-content; } .person-period .map-event { flex:0 0 205px; grid-template-columns:54px 1fr; min-height:62px; padding:10px 12px; border-right:1px solid #d4e1eb; border-bottom:0; } .person-period .map-event:last-child { border-right:0; } .person-period .map-event span { font-size:.76rem; } @media(max-width:700px) { .person-period { grid-template-columns:116px minmax(0,1fr); } .person-period h4 { min-height:56px; padding:9px; } .person-period .map-event { flex-basis:190px; min-height:56px; } }
+    .sequence-root { border-left-width:1px; box-shadow:none; } .sequence-root summary,.sequence-root[open] summary { box-shadow:none; } .sequence-step { margin-left:0; border-left-width:1px; background:inherit; } .sequence-step:before { left:-44px; width:11px; height:11px; border-width:3px; } .sequence-step:after { display:none; } .owner-themed.sequence-root,.owner-themed.sequence-step { border-left-color:var(--owner-color); background:linear-gradient(90deg,var(--owner-tint),#fff 36%); } .owner-themed.sequence-root summary,.owner-themed.sequence-root[open] summary { box-shadow:none; } @media(max-width:700px) { .sequence-step:before { left:-36px; } }
+    .person-periods { overflow:visible; } .person-period-events { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); min-width:0; } .person-period .map-event { display:grid; min-width:0; min-height:48px; padding:8px 10px; border-right:1px solid #d4e1eb; border-bottom:1px solid #d4e1eb; } .person-period .map-event span { font-size:.7rem; line-height:1.06; } .person-period .map-event time { font-size:.54rem; } @media(max-width:700px) { .person-period-events { grid-template-columns:repeat(auto-fit,minmax(138px,1fr)); } .person-period .map-event { min-height:46px; padding:7px 8px; } }
+    .person-run-sheet h3 { height:44px; min-height:0 !important; align-items:center !important; } .person-period-events { display:grid; grid-template-rows:repeat(3,minmax(46px,auto)); grid-auto-flow:column; grid-auto-columns:minmax(175px,1fr); grid-template-columns:none; } .person-period .map-event { min-height:46px; padding:7px 9px; } .person-period .map-event span { font-size:.68rem; line-height:1.04; } .person-period .map-event time { font-size:.52rem; } @media(max-width:700px) { .person-period-events { grid-auto-columns:minmax(150px,1fr); } }
+    .person-run-sheet { height:auto !important; min-height:0 !important; } .person-run-sheet h3 { height:40px; min-height:0 !important; padding:9px 13px !important; } .person-periods { display:flex !important; flex-direction:column; align-items:stretch !important; gap:7px; padding:7px; overflow:visible; } .person-period { display:grid !important; flex:none !important; grid-template-columns:132px minmax(0,1fr); min-height:0 !important; border:1px solid #c7d8e7; } .person-period:last-child { border-bottom:1px solid #c7d8e7; } .person-period h4 { display:flex; align-items:flex-start; min-height:0; padding:11px 10px; border-right:1px solid #c7d8e7; background:#f3f8fc; } .person-period-events { display:block !important; min-width:0 !important; min-height:0 !important; height:auto !important; } .person-period .map-event { display:grid; width:100%; min-height:36px; padding:7px 10px; grid-template-columns:74px 1fr; border-right:0; border-bottom:1px solid #d4e1eb; } .person-period .map-event:last-child { border-bottom:0; } .person-period .map-event span { font-size:.73rem; line-height:1.08; text-transform:none; letter-spacing:0; } .person-period .map-event time { font-size:.55rem; } @media(max-width:700px) { .person-period { grid-template-columns:100px minmax(0,1fr); } .person-period h4 { padding:10px 8px; } .person-period .map-event { grid-template-columns:59px 1fr; padding:7px 8px; } }
+  </style>
+</head>
+<body class="timeline-only">
+  <header class="hero">
+    <div><div class="eyebrow">Wedding day operations</div><h1>Lewis<br>&amp; Megan</h1><p class="date">Saturday · 22 August 2026</p><p>Chichester Harbour Hotel</p></div>
+  </header>
+  <nav aria-label="Wedding operations navigation">
+    <details class="nav-group"><summary>Views</summary><div class="subnav"><a href="#audiences">Choose a role view</a><a href="#run-day">Run of day</a><a href="#day">Master schedule</a></div></details>
+    <details class="nav-group"><summary>Run of day</summary><div class="subnav"><a href="#run-day">Day overview</a><a href="#prep">Pre-ceremony</a><a href="#day">Ceremony</a><a href="#day">Reception drinks</a><a href="#day">Wedding breakfast</a><a href="#evening-dj">Evening</a></div></details>
+    <details class="nav-group"><summary>Planning library</summary><div class="subnav"><a href="#day">Master schedule</a><a href="#music">All music</a><a href="#decor">Décor layouts & movements</a><a href="#master-contacts">Master contact list</a><a href="#accommodation">Accommodation</a><a href="#gallery">Photos & displays</a></div></details>
+    <details class="nav-group"><summary>Quick links</summary><div class="subnav"><a href="#precheck">Pre-ceremony checklist</a><a href="#attire">Attire</a><a href="#seating">Seating plan</a><a href="#food">Catering & meal choices</a><a href="#speeches">Speeches order</a><a href="#moc">MOC cheat sheet</a></div></details>
+  </nav>
+  <main>
+    <section id="timeline-view"><span class="section-kicker">Wedding day operations</span><h2>Saturday, 22 August 2026.</h2><p class="intro">Select any point in the day to reveal its operational notes. Major transitions are marked in green.</p><div class="timeline-key"><span><b>Click a point</b> for detail</span><span>Chichester Harbour Hotel</span></div><div class="dayline">
+      <details class="time-point"><summary><time class="event-time">7:00am</time><span class="event-title">Hair & makeup artist arrives</span><span class="event-place">Hotel</span></summary><div class="event-detail"><p><strong>Owner:</strong> HM Hair and Makeup. Begin wedding-party preparation.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">7:15am</time><span class="event-title">Mother of the groom — hair</span></summary><div class="event-detail"><p>First scheduled hair appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">8:00am</time><span class="event-title">Mother of the bride — hair</span></summary><div class="event-detail"><p>Hair appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">8:45am</time><span class="event-title">Bride — hair</span></summary><div class="event-detail"><p>Hair appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">9:00am</time><span class="event-title">Lewis leaves for the venue</span><span class="event-place">Travel timing</span></summary><div class="event-detail"><p><strong>Planning note:</strong> confirm transport, items travelling with Lewis and arrival handover.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">9:30am</time><span class="event-title">Mother of the bride — makeup</span></summary><div class="event-detail"><p>Makeup appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">10:15am</time><span class="event-title">Bride — makeup</span></summary><div class="event-detail"><p>Makeup appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">11:00am</time><span class="event-title">Genevieve — hair</span></summary><div class="event-detail"><p>Hair appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">11:30am</time><span class="event-title">Connie — hair</span></summary><div class="event-detail"><p>Hair appointment.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">12:00pm</time><span class="event-title">Final touch-ups</span></summary><div class="event-detail"><p>Final HMU checks before first-look and venue arrivals.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">12:10pm</time><span class="event-title">Lewis arrives</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>Hotel function sheet arrival time. Confirm readiness with venue team.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">12:20pm</time><span class="event-title">First look with Dad</span></summary><div class="event-detail"><p>Photography moment before guest arrivals.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">12:30pm</time><span class="event-title">Day guests arrive</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>Direct guests to the ceremony space. Front row remains reserved.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">12:40pm</time><span class="event-title">Lewis meets registrar</span><span class="event-place">The Priory Suite</span></summary><div class="event-detail"><p>Registrar interview.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">12:50pm</time><span class="event-title">Megan meets registrar</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>Registrar interview before ceremony.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">1:00pm</time><span class="event-title">Ceremony</span><span class="event-place">The Priory Suite</span></summary><div class="event-detail"><p>Master event. Open individual moments below for on-the-day detail.</p><div class="sub-events">
+        <details class="sub-event"><summary><span class="sub-label">Pre-ceremony · 20 minutes before</span>Cellist starts music</summary><p><strong>Betty Violet</strong> to play waiting music from approximately 12:40pm, positioned on the left side of the fireplace (car-park window side). <strong>Contact:</strong> Betty Violet Music · <a href="https://www.bettyvioletmusic.com/" target="_blank" rel="noopener">website ↗</a>. Setlist includes <em>Everything I Do</em>, <em>How Long Will I Love You</em>, <em>Can’t Help Falling in Love</em>, <em>Iris</em>, <em>Say You Won’t Let Go</em>, <em>God Only Knows</em> and <em>Beauty and the Beast</em>.</p></details>
+        <details class="sub-event"><summary><span class="sub-label">Ceremony opening</span>Bridal party & aisle walk</summary><p>Bridal party walks first; doors close while Megan takes position. On Megan’s signal, doors reopen for the bridal entrance. Music: Peter Gabriel — <em>The Book of Love</em>, bespoke cello arrangement.</p></details>
+        <details class="sub-event"><summary><span class="sub-label">Ceremony</span>Vows & officiation</summary><p><strong>Placeholder:</strong> add order of service, readings, rings, personal vows and any registrar prompts.</p></details>
+        <details class="sub-event"><summary><span class="sub-label">Ceremony</span>Register signing</summary><p>Music: Bryan Adams — <em>Everything I Do (I Do It For You)</em>; Christina Perri — <em>A Thousand Years</em>; <em>The Greatest Showman</em> — <em>A Million Dreams</em>.</p></details>
+        <details class="sub-event"><summary><span class="sub-label">Ceremony close</span>Recessional</summary><p>Music: The Rembrandts — <em>I’ll Be There for You</em>, bespoke cello arrangement.</p></details>
+        <details class="sub-event"><summary><span class="sub-label">Immediately after ceremony</span>Confetti</summary><p><strong>Location:</strong> Priory Park. Confirm who distributes confetti and the photographer’s preferred positioning.</p></details>
+      </div></div></details>
+      <details class="time-point"><summary><time class="event-time">1:30pm</time><span class="event-title">Priory Park photographs</span></summary><div class="event-detail"><p>Guests head directly to the park after the ceremony.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">2:00pm</time><span class="event-title">Drinks reception & canapés</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>Prosecco, canapés and live music from Betty Violet. Bar tab is active; no cocktails or double spirits.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">3:00pm</time><span class="event-title">Guests take seats for wedding breakfast</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Chairs and signing-table décor move through. Cake and cupcakes are displayed at the entrance table.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">3:15pm</time><span class="event-title">Announce Megan & Lewis into the room</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Background playlist begins for entrance and meal.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">3:30pm</time><span class="event-title">Speeches</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Speaking order remains to be confirmed.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">4:00pm</time><span class="event-title">Wedding breakfast service</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Three-course meal served; wine already arranged on tables.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">6:00pm</time><span class="event-title">Guests move to bar; evening set-up</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>DJ sets up by the stage; evening snack is set in the Priory Suite.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">6:30pm</time><span class="event-title">Evening guests arrive</span><span class="event-place">The Orangery</span></summary><div class="event-detail"><p>Hotel function sheet timing. Evening reception begins in the Murray Suite at 7:00pm.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">7:30pm</time><span class="event-title">Cake cutting & first dance</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Confirm DJ cue, cake knife and photo positioning beforehand.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">8:30pm</time><span class="event-title">Evening food is served</span><span class="event-place">The Murray Suite</span></summary><div class="event-detail"><p>Brie baguettes, pizza selection, sausage baps, wedding cake and cupcakes. Gluten-free option included.</p></div></details>
+      <details class="time-point major"><summary><time class="event-time">11:00pm</time><span class="event-title">Music finishes</span></summary><div class="event-detail"><p>DJ music curfew.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">11:30pm</time><span class="event-title">Last orders</span></summary><div class="event-detail"><p>Bar last orders.</p></div></details>
+      <details class="time-point"><summary><time class="event-time">11:55pm</time><span class="event-title">Guests depart</span></summary><div class="event-detail"><p>Hotel function sheet departure window.</p></div></details>
+    </div></section>
+    <section id="welcome"><span class="section-kicker">Internal planning hub</span><h2>Wedding day plan.</h2><p class="intro">Working information for the wedding party and suppliers — from preparations through to close. Keep this link within the wedding team.</p><div class="facts"><div class="fact"><b>Guest arrivals</b>Day guests from 12:30pm<br>Evening guests from 7:00pm</div><div class="fact"><b>Ceremony</b>1:00pm, The Priory Suite<br>Guests seated by 12:50pm</div><div class="fact"><b>Venue</b>Chichester Harbour Hotel<br>57 North Street, PO19 1NH</div></div></section>
+    <section id="audiences"><span class="section-kicker">Choose a view</span><h2>Start with your role.</h2><p class="intro">Select a role for a calmer, task-focused route through the same master plan.</p><div class="role-grid"><button class="role-card" data-role="master"><span class="role-icon">✦</span><h3>Master operations</h3><p>For Megan, Lewis and the MOC.</p></button><button class="role-card" data-role="party"><span class="role-icon">◇</span><h3>Wedding party</h3><p>For getting ready, travel and cues.</p></button><button class="role-card" data-role="supplier"><span class="role-icon">▣</span><h3>Hotel & suppliers</h3><p>For timings, rooms and handovers.</p></button><button class="role-card" data-role="glance"><span class="role-icon">◷</span><h3>Day at a glance</h3><p>For a concise, chronological overview.</p></button></div><div class="role-panel" id="role-panel" aria-live="polite"></div></section>
+    <section id="run-day"><span class="section-kicker">Run of day</span><h2>Operational phases.</h2><p class="intro">Use the phase cards for a focused view during the day; use the planning library to see each topic in full.</p><div class="phase-grid"><article class="phase" id="contacts"><span class="phase-no">01</span><h3>Key contacts</h3><p>Family, venue and supplier contacts.</p><div class="phase-links"><a href="#master-contacts">Master list →</a></div></article><article class="phase" id="pre-ceremony"><span class="phase-no">02</span><h3>Pre-ceremony</h3><p>Getting ready, HMU, travel and arrivals.</p><div class="phase-links"><a href="#prep">Schedule →</a><a href="#precheck">Checklist →</a><a href="#attire">Attire →</a></div></article><article class="phase" id="ceremony"><span class="phase-no">03</span><h3>Ceremony</h3><p>Arrival, music, seating and photographs.</p><div class="phase-links"><a href="#day">Schedule →</a><a href="#music">Music →</a><a href="#seating">Seating →</a></div></article><article class="phase" id="reception"><span class="phase-no">04</span><h3>Reception</h3><p>Drinks, breakfast, speeches and service.</p><div class="phase-links"><a href="#food">Catering →</a><a href="#speeches">Speeches →</a><a href="#group-photos">Photos →</a></div></article><article class="phase" id="evening"><span class="phase-no">05</span><h3>Evening</h3><p>Guest arrivals, dancing, food and close.</p><div class="phase-links"><a href="#evening-dj">Running order →</a><a href="#day">Schedule →</a></div></article></div><div class="contact-card"><h3>On-the-day contacts</h3><p>Pauline Lucas (M.O.B.): <a href="tel:07581184846">07581 184846</a><br>Wendi Burr (M.O.G.): <a href="tel:07468865219">07468 865219</a></p></div></section>
+    <section id="day"><span class="section-kicker">Planning library · master schedule</span><h2>Operational schedule.</h2><p class="intro">The single source of truth for timings. Filter by phase for an on-the-day working view.</p><div class="filterbar" aria-label="Timeline filter"><button class="active" data-filter="all">All day</button><button data-filter="pre">Pre-ceremony</button><button data-filter="ceremony">Ceremony</button><button data-filter="drinks">Reception drinks</button><button data-filter="breakfast">Wedding breakfast</button><button data-filter="evening">Evening</button></div><div class="timeline" id="timeline">
+      <article class="event pre"><time>7:00am</time><div><h3>Hair & makeup artist arrives</h3><span class="location">Hotel</span></div></article>
+      <article class="event pre"><time>7:15am</time><div><h3>Mother of the groom — hair</h3></div></article>
+      <article class="event pre"><time>8:00am</time><div><h3>Mother of the bride — hair</h3></div></article>
+      <article class="event pre"><time>8:45am</time><div><h3>Bride — hair</h3></div></article>
+      <article class="event pre"><time>9:30am</time><div><h3>Mother of the bride — makeup</h3></div></article>
+      <article class="event pre"><time>10:15am</time><div><h3>Bride — makeup</h3></div></article>
+      <article class="event pre"><time>11:00am</time><div><h3>Genevieve — hair</h3></div></article>
+      <article class="event pre"><time>11:30am</time><div><h3>Connie — hair</h3></div></article>
+      <article class="event pre"><time>12:00pm</time><div><h3>Final touch-ups</h3></div></article>
+      <article class="event ceremony"><time>12:30pm</time><div><h3>Day guests arrive</h3><span class="location">The Orangery</span></div></article>
+      <article class="event ceremony"><time>1:00pm</time><div><h3>Ceremony begins</h3><p>Cellist to play beforehand; front row remains reserved.</p><span class="location">The Priory Suite</span></div></article>
+      <article class="event ceremony"><time>1:30pm</time><div><h3>Priory Park photographs</h3><p>Guests to head directly to the park after the ceremony.</p></div></article>
+      <article class="event drinks"><time>2:00pm</time><div><h3>Drinks reception, canapés & music</h3><p>Betty Violet performs during the reception.</p><span class="location">The Orangery</span></div></article>
+      <article class="event breakfast"><time>3:00pm</time><div><h3>Guests take their seats</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event breakfast"><time>3:15pm</time><div><h3>Announce Megan & Lewis into the room</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event breakfast"><time>3:30pm</time><div><h3>Speeches</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event breakfast"><time>4:00pm</time><div><h3>Wedding breakfast</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event evening"><time>6:00pm</time><div><h3>Guests move to the bar; evening set-up begins</h3><span class="location">The Orangery</span></div></article>
+      <article class="event evening"><time>7:00pm</time><div><h3>Evening guest arrivals begin</h3><span class="location">The Orangery</span></div></article>
+      <article class="event evening"><time>7:30pm</time><div><h3>Cake cutting & first dance</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event evening"><time>8:30pm</time><div><h3>Evening food is served</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event evening"><time>11:00pm</time><div><h3>Music finishes</h3><span class="location">The Murray Suite</span></div></article>
+      <article class="event evening"><time>11:30pm</time><div><h3>Last orders</h3><span class="location">The Murray Suite</span></div></article>
+    </div></section>
+    <section id="speeches"><span class="section-kicker">Wedding breakfast · 3:30pm</span><h2>Speeches.</h2><div class="placeholder single" data-icon="☰"><div class="tag">Order placeholder</div><h3>Speaking order to be confirmed</h3><p>Finalise the speaker sequence, introduce each speaker, and record any timing or microphone notes here. Speech content is intentionally not included.</p></div></section>
+    <section id="prep"><span class="section-kicker">Wedding party only</span><h2>Pre-ceremony schedule.</h2><div class="placeholder single" data-icon="◷"><div class="tag">Placeholder</div><h3>Getting-ready, HMU & travel plan</h3><p>Departure timings, HMU order, child drop-offs, arrivals and key contacts will appear here.</p></div><div class="placeholder single" id="precheck" data-icon="✓" style="margin-top:16px"><div class="tag">Checklist placeholder</div><h3>Pre-ceremony checklist</h3><p>Final personal items, supplier confirmations, room checks and handover tasks will be recorded here.</p></div></section>
+    <section id="moc"><span class="section-kicker">Wedding party only</span><h2>MOC cheat sheet.</h2><div class="placeholder single" data-icon="✦"><div class="tag">Placeholder</div><h3>Moments that keep the day moving</h3><p>Announcements, handovers, supplier arrival points and escalation contacts will be added here.</p></div></section>
+    <section id="music"><span class="section-kicker">Ceremony & reception drinks</span><h2>Cellist & singer music plan.</h2><p class="intro">Betty Violet performs before and during the ceremony, then throughout the drinks reception.</p><div class="grid"><article class="card menu-card"><h3>Pre-ceremony</h3><ul><li>Bryan Adams — <em>Everything I Do (I Do It For You)</em></li><li>Ellie Goulding — <em>How Long Will I Love You</em></li><li>Elvis Presley — <em>Can’t Help Falling in Love</em></li><li>Goo Goo Dolls — <em>Iris</em></li><li>James Arthur — <em>Say You Won’t Let Go</em></li><li>Beach Boys — <em>God Only Knows</em></li><li><em>Beauty and the Beast</em> — <em>Beauty and the Beast</em></li></ul></article><article class="card menu-card"><h3>Ceremony moments</h3><ul><li><strong>Bridal entrance</strong><br>Peter Gabriel — <em>The Book of Love</em><br><span class="note">Bespoke cello arrangement</span></li><li><strong>Register signing</strong><br>Bryan Adams — <em>Everything I Do (I Do It For You)</em><br>Christina Perri — <em>A Thousand Years</em><br><em>The Greatest Showman</em> — <em>A Million Dreams</em></li><li><strong>Recessional</strong><br>The Rembrandts — <em>I’ll Be There for You</em><br><span class="note">Bespoke cello arrangement</span></li></ul></article><article class="card menu-card"><h3>Drinks reception</h3><ul><li>Bob Dylan — <em>Make You Feel My Love</em></li><li>Cyndi Lauper — <em>Time After Time</em></li><li>Ed Sheeran — <em>Perfect</em></li><li>Ed Sheeran — <em>Thinking Out Loud</em></li><li>Elton John — <em>Your Song</em></li><li>James Arthur — <em>Falling Like the Stars</em></li><li>Jason Mraz — <em>I Won’t Give Up</em></li><li>John Legend — <em>All of Me</em></li><li>Leonard Cohen — <em>Hallelujah</em></li><li>Taylor Swift — <em>Love Story</em></li><li>Yazoo — <em>Only You</em></li><li>Frankie Valli — <em>Can’t Take My Eyes Off You</em></li><li>Katy Perry — <em>Teenage Dream</em></li><li>Stevie Wonder — <em>Isn’t She Lovely</em></li><li>The Cure — <em>Friday I’m in Love</em></li><li>Wheatus — <em>Teenage Dirtbag</em></li></ul></article></div><div class="card" style="margin-top:16px"><h3>Additional requests</h3><p class="note">Optional requests for Betty Violet, time permitting.</p><ul style="margin:0;padding-left:18px"><li>One Direction — <em>Gotta Be You</em></li><li>Lewis Capaldi — <em>Stay</em></li><li>Enrique Iglesias — <em>Escape</em></li><li>Forest Blakk — <em>If You Love Her</em></li></ul></div><div class="placeholder single" id="spotify" data-icon="◌" style="margin-top:16px"><div class="tag">Playlist placeholder</div><h3>Wedding breakfast Spotify playlist</h3><p>Add the shared playlist link and any notes for entrance and meal background music here.</p></div></section>
+    <section id="food"><span class="section-kicker">Catering plan</span><h2>Food & drink service.</h2><div class="grid"><article class="card menu-card"><h3>Reception service</h3><ul><li>Prosecco</li><li>Butternut squash & sage arancini</li><li>Honey & mustard pig in blankets</li><li>Guacamole tartlets, chilli & lime</li></ul></article><article class="card menu-card"><h3>Wedding breakfast service</h3><ul><li>Roast red pepper & tomato soup</li><li>Cured salmon, fennel & lemon</li><li>Beef fillet or pan-fried chicken</li><li>Chocolate brownie or strawberry cheesecake</li></ul></article><article class="card menu-card"><h3>Evening snack service</h3><ul><li>Brie baguettes</li><li>Pizza selection</li><li>Sausage baps</li><li>Wedding cake & cupcakes</li></ul><p class="note">Gluten-free food to be included.</p></article></div></section>
+    <section id="seating"><span class="section-kicker">Wedding breakfast</span><h2>Seating plan.</h2><div class="seating"><article class="table"><div class="number">Sweetheart table</div><div class="names"><span>Lewis</span><span>Megan</span></div></article><article class="table"><div class="number">Table 2018–2020</div><div class="names"><span>Wendi</span><span>Genevieve</span><span>Vincent</span><span>Isaac</span><span>Issy</span><span>Sandra</span><span>Lazlo</span><span>Charles</span><span>Connie</span></div></article><article class="table"><div class="number">Table 2021–2023</div><div class="names"><span>Pauline</span><span>Hayden</span><span>Karen</span><span>Ian</span><span>Steve</span><span>Jan</span><span>Mandy</span><span>Nan</span></div></article><article class="table"><div class="number">Table 2024–2026</div><div class="names"><span>Rick</span><span>Kym</span><span>Zoe</span><span>Charlie</span><span>Tracey</span><span>David</span><span>Grandad Bill</span><span>Hannah</span><span>Jack</span></div></article></div><p class="seat-note"><strong>Ceremony seating:</strong> Front rows are reserved. Direct anyone unsure of their seat to a family member.</p></section>
+    <section id="details"><span class="section-kicker">Good to know</span><h2>Venue & practical details.</h2><div class="details"><article class="card"><h3>Chichester Harbour Hotel</h3><p>57 North Street<br>Chichester, West Sussex<br>PO19 1NH</p><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Chichester+Harbour+Hotel+57+North+Street+PO19+1NH">Open in Maps ↗</a></article><article class="card"><h3>A note on drinks</h3><p>A bar tab is available during the drinks reception (no cocktails or double spirits). The evening bar is cash/card bar.</p><p class="note">Music ends at 11:00pm; last orders are at 11:30pm.</p></article></div><div class="placeholder single" id="master-contacts" data-icon="☏" style="margin-top:16px"><div class="tag">Master list placeholder</div><h3>Master contact list</h3><p>Centralise family, wedding party, venue, supplier and emergency contacts here.</p></div></section>
+    <section id="decor"><span class="section-kicker">Room styling</span><h2>Decorations & movements.</h2><div class="placeholder-grid"><article class="placeholder" data-icon="✿"><div class="tag">Placeholder</div><h3>Ceremony setup</h3><p>Florals, aisle details, lanterns and signing-table layout.</p></article><article class="placeholder" data-icon="→"><div class="tag">Placeholder</div><h3>Room movements</h3><p>A clear checklist for moving items between the ceremony and breakfast rooms.</p></article><article class="placeholder" data-icon="✧"><div class="tag">Placeholder</div><h3>Reception details</h3><p>Top table garland, cake display, centrepieces and evening setup.</p></article></div></section>
+    <section id="attire"><span class="section-kicker">Wedding party</span><h2>Attire guide.</h2><div class="placeholder-grid"><article class="placeholder" data-icon="◇"><div class="tag">Placeholder</div><h3>The girls</h3><p>Dress images, colour guidance and accessories will be added here.</p></article><article class="placeholder" data-icon="♢"><div class="tag">Placeholder</div><h3>Hayden</h3><p>Suit reference and finishing details will be added here.</p></article><article class="placeholder" data-icon="♧"><div class="tag">Placeholder</div><h3>Lewis</h3><p>Suit reference and wedding-day styling notes will be added here.</p></article></div></section>
+    <section id="gallery"><span class="section-kicker">Inspiration & memories</span><h2>Photos & displays.</h2><p class="intro">Centre-piece images, photoboard photos and visual references will be collected here.</p><div class="placeholder single" id="group-photos" data-icon="▧"><div class="tag">Group photo placeholder</div><h3>Reception group photo list</h3><p>List each required group, the person coordinating it and the location for photographs here.</p></div><div class="placeholder single" data-icon="▧" style="margin-top:16px"><div class="tag">Placeholder</div><h3>Photo checklist & printable labels</h3><p>Use the gallery below to browse the collection; display assignments and print-ready labels will be added alongside it.</p></div><div class="gallery-shell" style="margin-top:16px"><div class="gallery-head"><p>Tap an image to see it in full, or open the collection in Drive.</p><a class="map-link open-drive" target="_blank" rel="noopener" href="https://drive.google.com/drive/folders/1eMZ71yE_dx5TaZ2rPVV2l_r2B0wLGCUr?usp=drive_link">Open gallery ↗</a></div><iframe class="drive-gallery" title="Megan and Lewis wedding photo gallery" loading="lazy" src="https://drive.google.com/embeddedfolderview?id=1eMZ71yE_dx5TaZ2rPVV2l_r2B0wLGCUr#grid">Your browser does not support embedded content. <a href="https://drive.google.com/drive/folders/1eMZ71yE_dx5TaZ2rPVV2l_r2B0wLGCUr?usp=drive_link">Open the gallery in Google Drive</a>.</iframe></div></section>
+    <section id="evening-dj"><span class="section-kicker">Evening reception</span><h2>Cake cutting, first dance & disco.</h2><div class="placeholder single" data-icon="◒"><div class="tag">Evening placeholder</div><h3>DJ / disco running order</h3><p>Record cake-cutting and first-dance cues, DJ requests, announcement wording and the close-of-night plan here.</p></div></section>
+    <section id="accommodation"><span class="section-kicker">Additional planning</span><h2>Accommodation.</h2><div class="placeholder single" data-icon="⌂"><div class="tag">Accommodation placeholder</div><h3>Guest room allocation</h3><p>Record who is staying, room allocations, booking references and check-in notes here.</p></div></section>
+    <section id="team"><span class="section-kicker">The people behind the day</span><h2>Our wonderful team.</h2><div class="suppliers"><div class="supplier"><small>Photography</small><a href="https://www.tobiaskey.com/" target="_blank" rel="noopener">Tobias Key Photography</a></div><div class="supplier"><small>Hair & makeup</small><a href="https://hmhairandmakeup.com/" target="_blank" rel="noopener">HM Hair and Makeup</a></div><div class="supplier"><small>Cellist & singer</small><a href="https://www.bettyvioletmusic.com/" target="_blank" rel="noopener">Betty Violet</a></div><div class="supplier"><small>DJ</small><a href="https://www.facebook.com/EddieJproductions/" target="_blank" rel="noopener">Eddie J Productions</a></div><div class="supplier"><small>Cake</small><a href="https://www.facebook.com/laurenscakes21x/" target="_blank" rel="noopener">Lauren's Cakes</a></div><div class="supplier"><small>Flowers</small><a href="https://www.etsy.com/uk/shop/SewinloveByMichelle" target="_blank" rel="noopener">Sew In Love By Michelle</a></div></div></section>
+  </main>
+  <footer><div class="private">Private wedding operations information</div><p>Megan & Lewis · 22 August 2026</p></footer>
+  <div class="now-bar" aria-live="polite"><b>On the day</b><span id="now-next">Loading schedule…</span></div>
+  <button class="explore" id="explore" aria-expanded="false" aria-controls="quick-nav">Explore sections</button>
+  <aside class="quick-nav" id="quick-nav" aria-label="Quick page navigation">
+    <a href="#run-day">Run of day overview</a><a href="#day">Master schedule</a><a href="#prep">Pre-ceremony</a><a href="#music">All music</a><a href="#decor">Décor layouts & movements</a><a href="#food">Catering & meal choices</a><a href="#seating">Seating plan</a><a href="#speeches">Speeches order</a><a href="#master-contacts">Master contacts</a><a href="#accommodation">Accommodation</a><a href="#gallery">Photos & displays</a><a href="#moc">MOC cheat sheet</a>
+  </aside>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+  <script src="wedding-data.js"></script>
+  <script>
+    const PLAN_VERSION = 'empty-timeline-2026-08-14';
+    const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
+    const shouldResetPlan = localStorage.getItem('megan-lewis-wedding-plan-version') !== PLAN_VERSION;
+    const timelineData = !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(window.WEDDING_DATA);
+    if (shouldResetPlan) {
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+      localStorage.setItem('megan-lewis-wedding-plan-version', PLAN_VERSION);
+    }
+    const cottageLocation = window.WEDDING_DATA.entities.find(entity => entity.id === 'cottage');
+    if (cottageLocation && !timelineData.entities.some(entity => entity.id === cottageLocation.id)) {
+      timelineData.entities.push(structuredClone(cottageLocation));
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    }
+    const masterOfCeremonies = window.WEDDING_DATA.entities.find(entity => entity.id === 'moc');
+    if (masterOfCeremonies && !timelineData.entities.some(entity => entity.id === masterOfCeremonies.id)) {
+      timelineData.entities.push(structuredClone(masterOfCeremonies));
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    }
+    const lewisContact = window.WEDDING_DATA.entities.find(entity => entity.id === 'lewis');
+    if (lewisContact && !timelineData.entities.some(entity => entity.id === lewisContact.id)) {
+      timelineData.entities.push(structuredClone(lewisContact));
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    }
+    let periodsUpdated = false;
+    window.WEDDING_DATA.periods.forEach(sourcePeriod => {
+      const currentPeriod = timelineData.periods.find(period => period.id === sourcePeriod.id);
+      if (currentPeriod) {
+        if (currentPeriod.name !== sourcePeriod.name || currentPeriod.order !== sourcePeriod.order) { Object.assign(currentPeriod, structuredClone(sourcePeriod)); periodsUpdated = true; }
+      } else { timelineData.periods.push(structuredClone(sourcePeriod)); periodsUpdated = true; }
+    });
+    if (periodsUpdated) localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    const groupPhotographyPeriodEntity = window.WEDDING_DATA.entities.find(entity => entity.id === 'period-group-photos');
+    const savedGroupPhotographyPeriodEntity = timelineData.entities.find(entity => entity.id === 'period-group-photos');
+    if (groupPhotographyPeriodEntity && !savedGroupPhotographyPeriodEntity) {
+      timelineData.entities.push(structuredClone(groupPhotographyPeriodEntity));
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    } else if (groupPhotographyPeriodEntity && savedGroupPhotographyPeriodEntity.name !== groupPhotographyPeriodEntity.name) {
+      Object.assign(savedGroupPhotographyPeriodEntity, structuredClone(groupPhotographyPeriodEntity));
+      localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
+    }
+    const timelineView = document.querySelector('#timeline-view');
+    const entityById = Object.fromEntries(timelineData.entities.map(entity => [entity.id, entity]));
+    const periodById = Object.fromEntries(timelineData.periods.map(period => [period.id, period]));
+    const detailsFor = eventId => timelineData.eventDetails.filter(detail => detail.eventId === eventId);
+    const relationsFor = detailId => timelineData.relationships.filter(relation => relation.detailId === detailId);
+    const entityIcon = entity => `<i class="entity-icon" data-lucide="${entity.icon || 'circle'}"></i>`;
+    const relatedButtons = detailId => relationsFor(detailId).filter(relation => !['owner', 'location', 'period'].includes(relation.role)).map(relation => {
+      const entity = entityById[relation.entityId];
+      return `<span><button class="related" data-entity-id="${entity.id}">${entityIcon(entity)}${entity.name}</button><button class="relation-remove" type="button" title="Remove ${entity.name}" data-remove-relation="true" data-relation-detail-id="${relation.detailId}" data-relation-entity-id="${relation.entityId}" data-relation-role="${relation.role}">×</button></span>`;
+    }).join('');
+    const detailMarkup = detail => `<details class="sub-event"><summary><span class="sub-label">${detail.category}</span><span data-inline-field="detail-title" data-detail-id="${detail.id}" contenteditable="false">${detail.title || detail.text.split('. ')[0]}</span></summary><p data-inline-field="detail" data-detail-id="${detail.id}" contenteditable="false">${detail.text}</p>${relatedButtons(detail.id)}</details>`;
+    const eventOwnerMarkup = event => {
+      const owners = detailsFor(event.id).flatMap(detail => relationsFor(detail.id)).filter(relation => relation.role === 'owner');
+      const uniqueOwners = [...new Map(owners.map(relation => [relation.entityId, relation])).values()];
+      return uniqueOwners.length ? `<span class="event-owner-wrap">${uniqueOwners.map(relation => { const owner = entityById[relation.entityId]; return `<span class="event-owner-pill">${entityIcon(owner)}${owner.name}<button class="relation-remove" type="button" title="Remove ${owner.name}" data-remove-relation="true" data-relation-detail-id="${relation.detailId}" data-relation-entity-id="${relation.entityId}" data-relation-role="owner">×</button></span>`; }).join('')}</span>` : '';
+    };
+    const eventMarkup = (event, gap) => {
+      const location = event.locationId ? entityById[event.locationId].name : '';
+      const locationEntity = event.locationId ? entityById[event.locationId] : null;
+      const sequenceClass = event.sequence?.type === 'step' ? 'sequence-step' : event.sequence?.type === 'root' ? 'sequence-root' : '';
+      const sequenceLabel = '';
+      return `<details class="time-point ${event.major ? 'major' : ''} ${sequenceClass}" data-event-id="${event.id}" style="--gap:${gap}px"><summary><time class="event-time ${event.time === 'TBC' ? 'tbc' : ''}" data-inline-field="time" contenteditable="false">${event.time}</time><span class="event-title"><span data-inline-field="title" contenteditable="false">${event.title}</span>${sequenceLabel}</span>${location ? `<span class="event-location-pill">${entityIcon(locationEntity)}${location}<button class="relation-remove" type="button" title="Remove ${location}" data-remove-location-event-id="${event.id}">Ã—</button></span>` : ''}${eventOwnerMarkup(event)}</summary><div class="event-detail"><div class="sub-events">${detailsFor(event.id).map(detailMarkup).join('')}</div><div class="inline-relation-actions"><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="owner">+ Owner</button><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="informed">+ Informed</button><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="location">+ Location</button></div></div><div class="event-actions"><button class="event-edit-icon" type="button" title="Edit event" aria-label="Edit ${event.title}" data-edit-event-id="${event.id}"><i data-lucide="pencil"></i></button><button class="event-edit-icon event-save" type="button" title="Save event" aria-label="Save ${event.title}" data-save-event-id="${event.id}"><i data-lucide="check"></i></button><button class="event-edit-icon event-cancel" type="button" title="Cancel editing" aria-label="Cancel editing" data-cancel-event-id="${event.id}"><i data-lucide="x"></i></button></div></details>`;
+    };
+    const timelineEvents = [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort);
+    const minutesOf = sortValue => Math.floor(sortValue / 100) * 60 + (sortValue % 100);
+    const timelineMarkup = [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => {
+      const periodEvents = timelineEvents.filter(event => event.periodId === period.id).sort((a, b) => a.sort - b.sort || a.title.localeCompare(b.title)); let previousEvent = null;
+      const eventMarkupForPeriod = periodEvents.map(event => {
+        const gap = previousEvent ? 8 : 6;
+        previousEvent = event; return eventMarkup(event, gap);
+      }).join('');
+      return `<section class="period-group" data-period-group="${period.id}"><div class="period-header"><button class="period-toggle" type="button" data-toggle-period-id="${period.id}">${period.name}</button><button class="period-add" type="button" data-add-period-id="${period.id}">+ Add event</button><button class="period-decor" type="button" data-period-id="${period.id}">Decoration setup ↗</button></div><div class="period-events">${eventMarkupForPeriod}</div></section>`;
+    }).join('');
+    timelineView.innerHTML = `<span class="section-kicker">Wedding day operations · ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
+    const dayline = timelineView.querySelector('.dayline');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button></div>');
+    const operationalMap = document.createElement('section');
+    operationalMap.className = 'operational-map';
+    operationalMap.setAttribute('aria-live', 'polite');
+    dayline.after(operationalMap);
+    function expandEventFully(card) {
+      if (!card) return;
+      card.open = true;
+      card.querySelectorAll('.sub-event').forEach(detail => detail.open = true);
+    }
+    timelineView.addEventListener('click', event => {
+      const summary = event.target.closest('.time-point > summary');
+      if (!summary || event.target.closest('.event-actions, .relation-remove')) return;
+      const card = summary.closest('.time-point');
+      setTimeout(() => { if (card.open) expandEventFully(card); }, 0);
+    });
+    const eventEntityIds = (eventId, role) => {
+      const detailIds = detailsFor(eventId).map(detail => detail.id);
+      return [...new Set(timelineData.relationships.filter(relation => detailIds.includes(relation.detailId) && relation.role === role).map(relation => relation.entityId))];
+    };
+    const eventLocation = event => event.locationId ? entityById[event.locationId]?.name || 'Unassigned' : 'Unassigned';
+    const eventPeople = event => [...new Set(['owner', 'informed'].flatMap(role => eventEntityIds(event.id, role)))].map(id => entityById[id]).filter(Boolean);
+    function eventWorkstream(event) {
+      if (event.workstream) return event.workstream;
+      const detailText = detailsFor(event.id).map(detail => `${detail.category} ${detail.title || ''} ${detail.text}`).join(' ');
+      const search = `${event.title} ${detailText}`.toLowerCase();
+      if (/hair|makeup|hmu/.test(search)) return 'HMU';
+      if (/music|cellist|dj|disco|dance|playlist/.test(search)) return 'Music';
+      if (/photo|photograph|confetti/.test(search)) return 'Photography';
+      if (/food|meal|canap|drink|catering|bar/.test(search)) return 'Food & drinks';
+      if (/decor|flower|floral|room|table|setup/.test(search)) return 'Venue & decor';
+      if (/travel|arrival|leave|logistic/.test(search)) return 'Logistics';
+      return 'General';
+    }
+    function mapEventMarkup(event) { return `<button type="button" class="map-event" data-map-event-id="${event.id}"><time>${event.time}</time><span>${event.title}</span></button>`; }
+    function renderOperationalViews(view = 'master') {
+      const events = [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort || a.title.localeCompare(b.title));
+      if (view === 'master') { dayline.hidden = false; operationalMap.classList.remove('active'); return; }
+      if (view === 'people') {
+        const people = new Map();
+        events.forEach(event => eventPeople(event).forEach(person => { if (!people.has(person.id)) people.set(person.id, { person, events:[] }); people.get(person.id).events.push(event); }));
+        const orderedPeople = [...people.values()].sort((a, b) => a.events[0].sort - b.events[0].sort || a.person.name.localeCompare(b.person.name));
+        const selectedId = people.has(operationalMap.dataset.personId) ? operationalMap.dataset.personId : orderedPeople[0]?.person.id;
+        const selected = people.get(selectedId);
+        const periodColumns = selected ? [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => ({ period, events:selected.events.filter(event => event.periodId === period.id) })).filter(column => column.events.length) : [];
+        operationalMap.innerHTML = `<label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
+        dayline.hidden = true; operationalMap.classList.add('active'); return;
+      }
+      const groups = new Map();
+      const addToGroup = (key, event) => { if (!groups.has(key)) groups.set(key, []); groups.get(key).push(event); };
+      if (view === 'workstream') events.forEach(event => addToGroup(eventWorkstream(event), event));
+      if (view === 'location') events.forEach(event => addToGroup(eventLocation(event), event));
+      const viewLabels = { workstream:'Workstreams', location:'Locations' };
+      operationalMap.innerHTML = `<p class="map-note">${viewLabels[view]} view · select an event to open it in the editable master timeline.</p><div class="map-lanes">${[...groups.entries()].sort(([a],[b]) => a.localeCompare(b)).map(([name, items]) => `<section class="map-lane"><h3>${name}</h3>${items.map(mapEventMarkup).join('')}</section>`).join('') || '<p class="map-note">No events have been added yet.</p>'}</div>`;
+      dayline.hidden = true; operationalMap.classList.add('active');
+    }
+    timelineView.addEventListener('click', event => {
+      const viewButton = event.target.closest('[data-timeline-view]');
+      if (viewButton) { timelineView.querySelectorAll('[data-timeline-view]').forEach(button => button.classList.toggle('active', button === viewButton)); renderOperationalViews(viewButton.dataset.timelineView); return; }
+      const mapEvent = event.target.closest('[data-map-event-id]');
+      if (mapEvent) { renderOperationalViews('master'); timelineView.querySelector('[data-timeline-view="master"]')?.classList.add('active'); const card = timelineView.querySelector(`[data-event-id="${mapEvent.dataset.mapEventId}"]`); if (card) { expandEventFully(card); card.scrollIntoView({ behavior:'smooth', block:'center' }); } }
+    });
+    operationalMap.addEventListener('change', event => {
+      const selector = event.target.closest('[data-person-view-select]');
+      if (!selector) return;
+      operationalMap.dataset.personId = selector.value;
+      renderOperationalViews('people');
+    });
+    function inlineRelationControls(event) {
+      const ownerId = eventEntityIds(event.id, 'owner')[0] || '';
+      const informedIds = eventEntityIds(event.id, 'informed');
+      const contacts = timelineData.entities.filter(entity => !['period', 'location'].includes(entity.type));
+      const locations = timelineData.entities.filter(entity => entity.type === 'location');
+      return `<label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label>`;
+    }
+    function renderInlineRelationControls(scope = timelineView) {
+      scope.querySelectorAll('.inline-relation-actions').forEach(container => {
+        const event = timelineData.events.find(item => item.id === container.closest('[data-event-id]')?.dataset.eventId);
+        if (!event) return;
+        container.innerHTML = inlineRelationControls(event);
+        const select = container.querySelector('[data-inline-informed-event-id]');
+        const choices = document.createElement('div'); choices.className = 'informed-choice-list';
+        choices.innerHTML = [...select.options].map(option => `<label><input type="checkbox" value="${option.value}" ${option.selected ? 'checked' : ''}>${option.text}</label>`).join('');
+        choices.addEventListener('change', change => {
+          const checkbox = change.target.closest('input[type="checkbox"]'); if (!checkbox) return;
+          select.querySelector(`option[value="${checkbox.value}"]`).selected = checkbox.checked;
+          const detail = eventPrimaryDetail(event.id); const detailIds = detailsFor(event.id).map(item => item.id);
+          const selectedIds = [...select.selectedOptions].map(option => option.value);
+          timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'informed'));
+          selectedIds.forEach(entityId => detail && timelineData.relationships.push({ detailId:detail.id, entityId, role:'informed' }));
+          persistPlan(); refreshInformedPills(event.id);
+        });
+        select.hidden = true; select.after(choices);
+      });
+    }
+    function refreshInformedPills(eventId) {
+      const card = timelineView.querySelector(`[data-event-id="${eventId}"]`); if (!card) return;
+      detailsFor(eventId).forEach(detail => {
+        const subEvent = card.querySelector(`[data-detail-id="${detail.id}"]`)?.closest('.sub-event'); if (!subEvent) return;
+        subEvent.querySelectorAll(':scope > span').forEach(pill => pill.remove());
+        subEvent.querySelector('p')?.insertAdjacentHTML('afterend', relatedButtons(detail.id));
+      });
+      if (window.lucide) window.lucide.createIcons();
+    }
+    const ownerPalettes = [
+      { color:'#668eae', tint:'#f1f6fa' },
+      { color:'#a87d49', tint:'#fbf5ed' },
+      { color:'#5c887d', tint:'#f0f7f4' },
+      { color:'#89739b', tint:'#f7f2fa' },
+      { color:'#a66e78', tint:'#fbf2f4' }
+    ];
+    function applySeriesThemes(scope = timelineView) {
+      const ownerIds = [...new Set(timelineData.events.flatMap(event => eventEntityIds(event.id, 'owner')))];
+      const ownerFor = event => {
+        const directOwner = eventEntityIds(event.id, 'owner')[0];
+        if (directOwner) return directOwner;
+        if (event.sequence?.type === 'step') return eventEntityIds(event.sequence.rootId, 'owner')[0];
+        return null;
+      };
+      scope.querySelectorAll('.time-point').forEach(card => {
+        const event = timelineData.events.find(item => item.id === card.dataset.eventId); if (!event) return;
+        const ownerId = ownerFor(event); if (!ownerId) return;
+        const palette = ownerPalettes[Math.max(0, ownerIds.indexOf(ownerId)) % ownerPalettes.length];
+        card.classList.add('owner-themed'); card.style.setProperty('--owner-color', palette.color); card.style.setProperty('--owner-tint', palette.tint);
+      });
+    }
+    renderInlineRelationControls();
+    applySeriesThemes();
+    const entityView = document.querySelector('#entity-view');
+    const decorModal = document.createElement('div');
+    decorModal.className = 'decor-modal'; decorModal.hidden = true;
+    decorModal.innerHTML = '<div class="decor-dialog" role="dialog" aria-modal="true" aria-labelledby="decor-title"></div>';
+    document.body.appendChild(decorModal);
+    const decorDialog = decorModal.querySelector('.decor-dialog');
+    function showDecorationSetup(periodId) {
+      const period = periodById[periodId];
+      const layouts = timelineData.decorationLayouts.filter(layout => layout.periodId === periodId);
+      decorDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">${period.name}</span><h2 id="decor-title">Decoration setup.</h2>${layouts.map(layout => { const location = entityById[layout.locationId]; return `<article><h3>${layout.title}</h3><div class="decor-location">${entityIcon(location)}${location.name}</div><p>${layout.description}</p><ul class="decor-list">${layout.items.map(item => `<li>${item}</li>`).join('')}</ul><div class="asset-slots">${layout.assets.length ? layout.assets.map(asset => `<img src="${asset}" alt="${layout.title}" style="width:100%;height:105px;object-fit:cover">`).join('') : '<div class="asset-slot">Image / layout diagram</div><div class="asset-slot">Placement reference</div><div class="asset-slot">Movement diagram</div>'}</div></article>`; }).join('')}`;
+      decorModal.hidden = false;
+      if (window.lucide) window.lucide.createIcons();
+      decorDialog.querySelector('.decor-close').focus();
+    }
+    function closeDecorationSetup() { decorModal.hidden = true; }
+    decorModal.addEventListener('click', event => { if (event.target === decorModal || event.target.closest('.decor-close')) closeDecorationSetup(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !decorModal.hidden) closeDecorationSetup(); });
+    function showEntityView(entityId) {
+      const entity = entityById[entityId];
+      const linked = timelineData.relationships.filter(relation => relation.entityId === entityId).map(relation => {
+        const detail = timelineData.eventDetails.find(item => item.id === relation.detailId);
+        const event = timelineData.events.find(item => item.id === detail.eventId);
+        return { relation, detail, event };
+      });
+      entityView.hidden = false;
+      entityView.innerHTML = `<button class="clear-view" type="button">Clear</button><h3>${entityIcon(entity)} ${entity.name}</h3><p>${entity.type} record${entity.role ? ` · ${entity.role}` : ''}${entity.website ? ` · <a href="${entity.website}" target="_blank" rel="noopener">website ↗</a>` : ''}</p><ul>${linked.map(item => `<li><strong>${item.event.time} · ${item.event.title}</strong> — ${item.relation.role}: ${item.detail.text}</li>`).join('') || '<li>No linked detail records yet.</li>'}</ul>`;
+      entityView.querySelector('.clear-view').addEventListener('click', () => { entityView.hidden = true; });
+      if (window.lucide) window.lucide.createIcons();
+      entityView.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    const editModal = document.createElement('div');
+    editModal.className = 'edit-modal'; editModal.hidden = true;
+    editModal.innerHTML = '<div class="edit-dialog" role="dialog" aria-modal="true"></div>';
+    document.body.appendChild(editModal);
+    const editDialog = editModal.querySelector('.edit-dialog');
+    const inputTime = value => { if (!value || value === 'TBC') return ''; const match = value.match(/(\d+):(\d+)(am|pm)/i); if (!match) return ''; let hour = Number(match[1]); const minute = match[2]; if (match[3].toLowerCase() === 'pm' && hour !== 12) hour += 12; if (match[3].toLowerCase() === 'am' && hour === 12) hour = 0; return `${String(hour).padStart(2,'0')}:${minute}`; };
+    const displayTime = value => { if (!value) return 'TBC'; const [hourValue, minute] = value.split(':').map(Number); const suffix = hourValue >= 12 ? 'pm' : 'am'; const hour = hourValue % 12 || 12; return `${hour}:${String(minute).padStart(2,'0')}${suffix}`; };
+    const sortTime = value => { if (!value) return 9999; const [hour, minute] = value.split(':').map(Number); return hour * 100 + minute; };
+    const selectableEntities = timelineData.entities.filter(entity => !['period', 'location'].includes(entity.type));
+    function openEventEditor(eventId, initialPeriodId) {
+      const event = eventId ? timelineData.events.find(item => item.id === eventId) : null;
+      const detail = event ? detailsFor(event.id)[0] : null;
+      const detailRelations = detail ? relationsFor(detail.id) : [];
+      const ownerId = detailRelations.find(item => item.role === 'owner')?.entityId || '';
+      const informedIds = detailRelations.filter(item => item.role === 'informed').map(item => item.entityId);
+      const periodOptions = timelineData.periods.map(period => `<option value="${period.id}" ${(event?.periodId || initialPeriodId) === period.id ? 'selected' : ''}>${period.name}</option>`).join('');
+      const locationOptions = `<option value="">No location</option>${timelineData.entities.filter(entity => entity.type === 'location').map(location => `<option value="${location.id}" ${event?.locationId === location.id ? 'selected' : ''}>${location.name}</option>`).join('')}`;
+      const ownerOptions = `<option value="">No owner</option>${selectableEntities.map(entity => `<option value="${entity.id}" ${ownerId === entity.id ? 'selected' : ''}>${entity.name}</option>`).join('')}`;
+      const informedOptions = selectableEntities.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('');
+      const categories = ['Setup', 'Activity', 'Arrival', 'Travel', 'Ceremony', 'Music', 'Photography', 'Catering', 'Room movement', 'Announcement', 'Venue', 'Logistics', 'Placeholder'];
+      const selectedCategory = (detail?.category || 'Logistics').toLowerCase();
+      const categoryOptions = categories.map(category => `<option value="${category}" ${category.toLowerCase() === selectedCategory ? 'selected' : ''}>${category}</option>`).join('');
+      const sequence = event?.sequence || { type:'independent' };
+      const rootOptions = `<option value="">Choose a series</option>${timelineData.events.filter(item => item.sequence?.type === 'root' && item.id !== event?.id).map(item => `<option value="${item.id}" ${sequence.rootId === item.id ? 'selected' : ''}>${item.title}</option>`).join('')}`;
+      editDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">${event ? 'Edit event' : 'New event'}</span><h2>${event ? event.title : 'Add new event'}</h2><form class="edit-form" id="event-form"><label>Time<input name="time" type="time" value="${event ? inputTime(event.time) : ''}"></label><label>Period<select name="periodId" required>${periodOptions}</select></label><label class="wide">Event name<input name="title" required value="${event?.title || ''}"></label><label>Location<select name="locationId">${locationOptions}</select></label><label class="check">Major transition<input name="major" type="checkbox" ${event?.major ? 'checked' : ''}></label><label>Detail category<select name="category">${categoryOptions}</select></label><label>Event flow<select name="sequenceType" id="sequence-type"><option value="independent" ${sequence.type === 'independent' ? 'selected' : ''}>This is its own event</option><option value="root" ${sequence.type === 'root' ? 'selected' : ''}>This begins a series of steps</option><option value="step" ${sequence.type === 'step' ? 'selected' : ''}>This is part of a series</option></select></label><div class="sequence-step-fields" id="sequence-step-fields" ${sequence.type === 'step' ? '' : 'hidden'}><label>This series<select name="sequenceRootId">${rootOptions}</select></label><label>Position in the series<input name="sequenceOrder" type="number" min="1" value="${sequence.order || ''}"></label></div><label>Owner<select name="ownerId">${ownerOptions}</select></label><div class="informed-field"><label>Informed<select name="informedIds" multiple>${informedOptions}</select></label><button type="button" class="add-contact" id="add-contact">+ Add contact</button></div><label class="wide">Event detail<textarea name="detailText" required>${detail?.text || ''}</textarea></label><div class="form-actions">${event ? `<button type="button" class="form-delete" data-form-delete-id="${event.id}">Delete event</button>` : ''}<button type="button" class="decor-close">Cancel</button><button type="submit">Save event</button></div></form>`;
+      const workstreamField = document.createElement('label');
+      const workstreams = ['','HMU','Music','Photography','Food & drinks','Venue & decor','Logistics','General'];
+      workstreamField.innerHTML = `Workstream<select name="workstream">${workstreams.map(item => `<option value="${item}" ${item === (event?.workstream || '') ? 'selected' : ''}>${item || 'Auto-detect'}</option>`).join('')}</select>`;
+      editDialog.querySelector('[name="category"]').closest('label').after(workstreamField);
+      editModal.hidden = false;
+      editDialog.querySelector('.decor-close').focus();
+      editDialog.querySelector('.decor-close').addEventListener('click', () => { editModal.hidden = true; });
+      editDialog.querySelector('#add-contact').addEventListener('click', () => {
+        const name = prompt('Contact name'); if (!name?.trim()) return;
+        const contact = { id:`contact-${Date.now()}`, type:'person', name:name.trim(), icon:'user-round' };
+        timelineData.entities.push(contact);
+        const option = new Option(contact.name, contact.id, false, true);
+        editDialog.querySelector('[name="informedIds"]').add(option);
+        editDialog.querySelector('[name="ownerId"]').add(new Option(contact.name, contact.id));
+      });
+      editDialog.querySelector('#sequence-type').addEventListener('change', sequenceChange => { editDialog.querySelector('#sequence-step-fields').hidden = sequenceChange.target.value !== 'step'; });
+      editDialog.querySelector('[data-form-delete-id]')?.addEventListener('click', deleteClick => deleteEvent(deleteClick.currentTarget.dataset.formDeleteId));
+      editDialog.querySelector('#event-form').addEventListener('submit', formEvent => {
+        formEvent.preventDefault(); const form = new FormData(formEvent.currentTarget); const now = Date.now();
+        const id = event?.id || `event-${now}`; const detailId = detail?.id || `${id}-detail`;
+        const updated = event || { id, major:false };
+        updated.time = displayTime(form.get('time')); updated.sort = sortTime(form.get('time')); updated.periodId = form.get('periodId'); updated.title = form.get('title').trim(); updated.locationId = form.get('locationId') || undefined; updated.workstream = form.get('workstream') || undefined; updated.major = form.get('major') === 'on';
+        const sequenceType = form.get('sequenceType'); updated.sequence = sequenceType === 'root' ? { type:'root' } : sequenceType === 'step' ? { type:'step', rootId:form.get('sequenceRootId') } : undefined;
+        if (!event) timelineData.events.push(updated);
+        const updatedDetail = detail || { id: detailId, eventId:id }; updatedDetail.category = form.get('category').trim() || 'logistics'; updatedDetail.text = form.get('detailText').trim();
+        if (!detail) timelineData.eventDetails.push(updatedDetail);
+        timelineData.relationships = timelineData.relationships.filter(item => item.detailId !== detailId);
+        timelineData.relationships.push({ detailId, entityId:`period-${updated.periodId}`, role:'period' });
+        if (form.get('ownerId')) timelineData.relationships.push({ detailId, entityId:form.get('ownerId'), role:'owner' });
+        form.getAll('informedIds').forEach(entityId => timelineData.relationships.push({ detailId, entityId, role:'informed' }));
+        localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); window.location.reload();
+      });
+    }
+    function deleteEvent(eventId) { if (!confirm('Delete this event and its detail records?')) return; const detailIds = timelineData.eventDetails.filter(detail => detail.eventId === eventId).map(detail => detail.id); timelineData.events = timelineData.events.filter(event => event.id !== eventId); timelineData.eventDetails = timelineData.eventDetails.filter(detail => detail.eventId !== eventId); timelineData.relationships = timelineData.relationships.filter(relation => !detailIds.includes(relation.detailId)); localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); window.location.reload(); }
+    editModal.addEventListener('click', event => { if (event.target === editModal) editModal.hidden = true; });
+    let inlineEditingId = null;
+    function startInlineEdit(eventId) {
+      if (inlineEditingId && inlineEditingId !== eventId) cancelInlineEdit(inlineEditingId);
+      const card = timelineView.querySelector(`[data-event-id="${eventId}"]`); if (!card) return;
+      inlineEditingId = eventId; card.open = true; card.classList.add('inline-editing');
+      const actions = card.querySelector('.event-actions');
+      if (actions && !actions.querySelector('[data-delete-inline-event-id]')) actions.insertAdjacentHTML('beforeend', `<button class="event-edit-icon event-delete" type="button" title="Delete event" aria-label="Delete event" data-delete-inline-event-id="${eventId}"><i data-lucide="trash-2"></i></button>`);
+      card.querySelectorAll('.sub-event').forEach(detail => detail.open = true);
+      card.querySelectorAll('[data-inline-field]').forEach(field => field.contentEditable = field.dataset.inlineField !== 'time' ? 'true' : 'false');
+    }
+    function cancelInlineEdit(eventId) {
+      const card = timelineView.querySelector(`[data-event-id="${eventId}"]`); if (!card) return;
+      const record = timelineData.events.find(item => item.id === eventId);
+      card.querySelector('[data-inline-field="time"]').textContent = record.time;
+      card.querySelector('[data-inline-field="title"]').textContent = record.title;
+      card.querySelectorAll('[data-inline-field="detail"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) field.textContent = detail.text; });
+      card.querySelectorAll('[data-inline-field="detail-title"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) field.textContent = detail.title || detail.text.split('. ')[0]; });
+      card.classList.remove('inline-editing'); card.querySelectorAll('[data-inline-field]').forEach(field => field.contentEditable = 'false'); inlineEditingId = null;
+    }
+    function saveInlineEdit(eventId) {
+      const card = timelineView.querySelector(`[data-event-id="${eventId}"]`); const record = timelineData.events.find(item => item.id === eventId); if (!card || !record) return;
+      const rawTime = card.querySelector('[data-inline-field="time"]').textContent.trim(); const timeInput = /^\d{1,2}:\d{2}(am|pm)$/i.test(rawTime) ? inputTime(rawTime) : '';
+      record.time = displayTime(timeInput); record.sort = sortTime(timeInput); record.title = card.querySelector('[data-inline-field="title"]').textContent.trim();
+      card.querySelectorAll('[data-inline-field="detail"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) detail.text = field.textContent.trim(); });
+      card.querySelectorAll('[data-inline-field="detail-title"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) detail.title = field.textContent.trim(); });
+      persistPlan(); card.classList.remove('inline-editing'); card.querySelectorAll('[data-inline-field]').forEach(field => field.contentEditable = 'false'); inlineEditingId = null;
+    }
+    function persistPlan() { localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData)); }
+    function deleteInlineEvent(eventId, trigger) {
+      if (trigger.dataset.confirmDelete !== 'true') {
+        trigger.dataset.confirmDelete = 'true'; trigger.classList.add('confirming'); trigger.textContent = 'Confirm delete'; trigger.title = 'Click again to permanently delete';
+        setTimeout(() => { if (trigger.isConnected) { delete trigger.dataset.confirmDelete; trigger.classList.remove('confirming'); trigger.innerHTML = '<i data-lucide="trash-2"></i>'; trigger.title = 'Delete event'; if (window.lucide) window.lucide.createIcons(); } }, 3500);
+        return;
+      }
+      const detailIds = detailsFor(eventId).map(detail => detail.id);
+      timelineData.events = timelineData.events.filter(event => event.id !== eventId);
+      timelineData.eventDetails = timelineData.eventDetails.filter(detail => detail.eventId !== eventId);
+      timelineData.relationships = timelineData.relationships.filter(relation => !detailIds.includes(relation.detailId));
+      timelineView.querySelector(`[data-event-id="${eventId}"]`)?.remove(); inlineEditingId = null; persistPlan();
+    }
+    function eventPrimaryDetail(eventId) { return timelineData.eventDetails.find(detail => detail.eventId === eventId); }
+    function createInlineEntity(type, suppliedName) {
+      const name = suppliedName === undefined ? prompt(type === 'location' ? 'New location name' : 'New contact name') : suppliedName;
+      if (!name?.trim()) return null;
+      const entity = { id:`${type}-${Date.now()}`, type, name:name.trim(), icon:type === 'location' ? 'map-pin' : 'user-round' };
+      timelineData.entities.push(entity);
+      entityById[entity.id] = entity;
+      return entity;
+    }
+    function refreshInlineEvent(eventId) {
+      const existing = timelineView.querySelector(`[data-event-id="${eventId}"]`);
+      const record = timelineData.events.find(item => item.id === eventId);
+      if (!existing || !record) return;
+      const timeField = existing.querySelector('[data-inline-field="time"]');
+      const titleField = existing.querySelector('[data-inline-field="title"]');
+      if (timeField) { const pickedTime = inputTime(timeField.textContent.trim()); record.time = displayTime(pickedTime); record.sort = sortTime(pickedTime); }
+      if (titleField) record.title = titleField.textContent.trim();
+      existing.querySelectorAll('[data-inline-field="detail"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) detail.text = field.textContent.trim(); });
+      existing.querySelectorAll('[data-inline-field="detail-title"]').forEach(field => { const detail = timelineData.eventDetails.find(item => item.id === field.dataset.detailId); if (detail) detail.title = field.textContent.trim(); });
+      const gap = parseInt(existing.style.getPropertyValue('--gap'), 10) || 8;
+      existing.outerHTML = eventMarkup(record, gap);
+      renderInlineRelationControls(timelineView);
+      applySeriesThemes(timelineView);
+      startInlineEdit(eventId);
+      if (window.lucide) window.lucide.createIcons();
+    }
+    function addInlineRelationship(eventId, role, entityId) {
+      const record = timelineData.events.find(item => item.id === eventId);
+      if (!record) return;
+      if (entityId === '__new__') {
+        const entity = createInlineEntity(role === 'location' ? 'location' : 'person');
+        if (!entity) return;
+        entityId = entity.id;
+      }
+      if (role === 'location') { record.locationId = entityId; refreshInlineEvent(eventId); persistPlan(); return; }
+      const detail = eventPrimaryDetail(eventId); if (!detail) return;
+      if (role === 'owner') {
+        const detailIds = detailsFor(eventId).map(item => item.id);
+        timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'owner'));
+      }
+      const exists = timelineData.relationships.some(relation => relation.detailId === detail.id && relation.entityId === entityId && relation.role === role);
+      if (!exists) timelineData.relationships.push({ detailId:detail.id, entityId, role });
+      refreshInlineEvent(eventId);
+      persistPlan();
+    }
+    function showRelationshipPicker(eventId, role, trigger) {
+      const actionBox = trigger.closest('.inline-relation-actions');
+      actionBox.querySelector('.relation-picker')?.remove();
+      const detail = eventPrimaryDetail(eventId);
+      const used = role === 'location' ? [] : timelineData.relationships.filter(relation => relation.detailId === detail?.id && relation.role === role).map(relation => relation.entityId);
+      const candidates = timelineData.entities.filter(entity => role === 'location' ? entity.type === 'location' : !['period', 'location'].includes(entity.type)).filter(entity => !used.includes(entity.id));
+      const picker = document.createElement('select');
+      picker.className = 'relation-picker'; picker.dataset.relationshipPickerEventId = eventId; picker.dataset.relationshipPickerRole = role;
+      picker.innerHTML = `<option value="">Choose ${role}</option>${candidates.map(entity => `<option value="${entity.id}">${entity.name}</option>`).join('')}<option value="__new__">+ Add new ${role === 'location' ? 'location' : 'contact'}</option>`;
+      actionBox.appendChild(picker); picker.focus();
+    }
+    function openInlineTimePicker(field) {
+      document.querySelector('.time-edit-modal')?.remove();
+      const modal = document.createElement('div');
+      modal.className = 'time-edit-modal';
+      modal.innerHTML = `<div class="time-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="time-edit-title"><h3 id="time-edit-title">Change event time</h3><label>Time<input type="time" value="${inputTime(field.textContent.trim())}"></label><div class="time-edit-actions"><button type="button" data-time-cancel>Cancel</button><button type="button" data-time-tbc>Set TBC</button><button type="button" data-time-apply>Apply</button></div></div>`;
+      document.body.appendChild(modal);
+      const input = modal.querySelector('input'); input.focus();
+      const close = () => modal.remove();
+      modal.addEventListener('click', event => {
+        if (event.target === modal || event.target.closest('[data-time-cancel]')) { close(); return; }
+        if (event.target.closest('[data-time-tbc]')) { field.textContent = 'TBC'; close(); return; }
+        if (event.target.closest('[data-time-apply]')) { field.textContent = displayTime(input.value); close(); }
+      });
+      modal.addEventListener('keydown', event => { if (event.key === 'Escape') close(); if (event.key === 'Enter' && event.target === input) { field.textContent = displayTime(input.value); close(); } });
+    }
+    timelineView.addEventListener('change', event => {
+      const ownerSelect = event.target.closest('[data-inline-owner-event-id]');
+      const locationSelect = event.target.closest('[data-inline-location-event-id]');
+      if (ownerSelect) {
+        const eventId = ownerSelect.dataset.inlineOwnerEventId; const detail = eventPrimaryDetail(eventId); const detailIds = detailsFor(eventId).map(item => item.id);
+        timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'owner'));
+        if (ownerSelect.value && detail) timelineData.relationships.push({ detailId:detail.id, entityId:ownerSelect.value, role:'owner' });
+        refreshInlineEvent(eventId); persistPlan(); return;
+      }
+      if (locationSelect) {
+        const eventId = locationSelect.dataset.inlineLocationEventId; const record = timelineData.events.find(item => item.id === eventId);
+        if (record) record.locationId = locationSelect.value || undefined;
+        refreshInlineEvent(eventId); persistPlan(); return;
+      }
+      const picker = event.target.closest('[data-relationship-picker-event-id]');
+      if (picker?.value) addInlineRelationship(picker.dataset.relationshipPickerEventId, picker.dataset.relationshipPickerRole, picker.value);
+    });
+    timelineView.addEventListener('click', event => {
+      const applyInformed = event.target.closest('[data-apply-informed-event-id]');
+      const createRecord = event.target.closest('[data-create-inline-record]');
+      if (applyInformed) {
+        const eventId = applyInformed.dataset.applyInformedEventId; const detail = eventPrimaryDetail(eventId); const detailIds = detailsFor(eventId).map(item => item.id);
+        const select = timelineView.querySelector(`[data-inline-informed-event-id="${eventId}"]`);
+        const selectedIds = [...select.selectedOptions].map(option => option.value);
+        timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'informed'));
+        selectedIds.forEach(entityId => detail && timelineData.relationships.push({ detailId:detail.id, entityId, role:'informed' }));
+        refreshInlineEvent(eventId); persistPlan(); return;
+      }
+      if (createRecord) {
+        const widget = createRecord.closest('[data-record-widget-event-id]'); const nameInput = widget.querySelector('[data-new-record-name]');
+        const entity = createInlineEntity(widget.querySelector('[data-new-record-type]').value, nameInput.value.trim());
+        if (!entity) { nameInput.focus(); return; }
+        nameInput.value = ''; refreshInlineEvent(widget.dataset.recordWidgetEventId); persistPlan(); return;
+      }
+    });
+    timelineView.addEventListener('click', event => {
+      const removeRelation = event.target.closest('[data-remove-relation]');
+      const removeLocation = event.target.closest('[data-remove-location-event-id]');
+      if (!removeRelation && !removeLocation) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      const card = event.target.closest('[data-event-id]');
+      const eventId = card?.dataset.eventId;
+      if (!eventId) return;
+      if (removeLocation) {
+        const record = timelineData.events.find(item => item.id === eventId);
+        if (record) delete record.locationId;
+      } else if (removeRelation.dataset.relationRole === 'owner') {
+        const detailIds = detailsFor(eventId).map(item => item.id);
+        timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'owner'));
+      } else {
+        timelineData.relationships = timelineData.relationships.filter(relation => !(relation.detailId === removeRelation.dataset.relationDetailId && relation.entityId === removeRelation.dataset.relationEntityId && relation.role === removeRelation.dataset.relationRole));
+      }
+      refreshInlineEvent(eventId); persistPlan();
+    }, true);
+    timelineView.addEventListener('click', event => { const deleteTrigger = event.target.closest('[data-delete-inline-event-id]'); if (deleteTrigger) { event.preventDefault(); event.stopImmediatePropagation(); deleteInlineEvent(deleteTrigger.dataset.deleteInlineEventId, deleteTrigger); } });
+    timelineView.addEventListener('click', event => { const inlineField = event.target.closest('.inline-editing [data-inline-field]'); const editTrigger = event.target.closest('[data-edit-event-id]'); const saveTrigger = event.target.closest('[data-save-event-id]'); const cancelTrigger = event.target.closest('[data-cancel-event-id]'); const addRelationTrigger = event.target.closest('[data-add-relation-event-id]'); const removeRelationTrigger = event.target.closest('[data-remove-relation]'); const removeLocationTrigger = event.target.closest('[data-remove-location-event-id]'); const addTrigger = event.target.closest('[data-add-period-id]'); const collapseTrigger = event.target.closest('[data-toggle-period-id]'); const periodTrigger = event.target.closest('[data-period-id]'); const entityTrigger = event.target.closest('[data-entity-id]'); if (inlineField) { event.preventDefault(); if (inlineField.dataset.inlineField === 'time') openInlineTimePicker(inlineField); else inlineField.focus(); return; } if (editTrigger) { startInlineEdit(editTrigger.dataset.editEventId); return; } if (saveTrigger) { saveInlineEdit(saveTrigger.dataset.saveEventId); return; } if (cancelTrigger) { cancelInlineEdit(cancelTrigger.dataset.cancelEventId); return; } if (addRelationTrigger) { showRelationshipPicker(addRelationTrigger.dataset.addRelationEventId, addRelationTrigger.dataset.addRelationRole, addRelationTrigger); return; } if (removeRelationTrigger) { timelineData.relationships = timelineData.relationships.filter(relation => !(relation.detailId === removeRelationTrigger.dataset.relationDetailId && relation.entityId === removeRelationTrigger.dataset.relationEntityId && relation.role === removeRelationTrigger.dataset.relationRole)); persistPlan(); return; } if (removeLocationTrigger) { const record = timelineData.events.find(item => item.id === removeLocationTrigger.dataset.removeLocationEventId); if (record) { delete record.locationId; persistPlan(); } return; } if (addTrigger) { openEventEditor(null, addTrigger.dataset.addPeriodId); return; } if (collapseTrigger) { collapseTrigger.closest('.period-group').classList.toggle('collapsed'); return; } if (periodTrigger) showDecorationSetup(periodTrigger.dataset.periodId); if (entityTrigger) showEntityView(entityTrigger.dataset.entityId); });
+    if (window.lucide) window.lucide.createIcons();
+    const buttons = document.querySelectorAll('[data-filter]');
+    const events = document.querySelectorAll('.event');
+    buttons.forEach(button => button.addEventListener('click', () => {
+      buttons.forEach(item => item.classList.toggle('active', item === button));
+      const filter = button.dataset.filter;
+      events.forEach(event => event.hidden = filter !== 'all' && !event.classList.contains(filter));
+    }));
+    const explore = document.querySelector('#explore');
+    const quickNav = document.querySelector('#quick-nav');
+    explore.addEventListener('click', () => {
+      const isOpen = quickNav.classList.toggle('open');
+      explore.setAttribute('aria-expanded', isOpen);
+      explore.textContent = isOpen ? 'Close menu' : 'Explore sections';
+    });
+    quickNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => explore.click()));
+    const roleViews = {
+      master: { title:'Master operations', text:'The complete operational view for Megan, Lewis and the MOC: timings, contacts, room movements and every planning resource.', links:[['Master schedule','#day'],['Run of day','#run-day'],['Master contacts','#master-contacts'],['Décor movements','#decor'],['Accommodation','#accommodation']] },
+      party: { title:'Wedding party', text:'A focused route for getting ready, travel, attire, ceremony cues and the wedding-breakfast seating plan.', links:[['Pre-ceremony schedule','#prep'],['Checklist','#precheck'],['Attire','#attire'],['Ceremony music','#music'],['Seating plan','#seating']] },
+      supplier: { title:'Hotel & suppliers', text:'The delivery view for venue and suppliers: master timings, service details, rooms, décor handovers and contacts.', links:[['Master schedule','#day'],['Venue details','#details'],['Catering','#food'],['Décor movements','#decor'],['Master contacts','#master-contacts']] },
+      glance: { title:'Day at a glance', text:'A concise chronological route for anyone who needs to follow the day without the full planning detail.', links:[['Run of day','#run-day'],['Filtered schedule','#day'],['Speeches order','#speeches'],['Evening running order','#evening-dj']] }
+    };
+    const rolePanel = document.querySelector('#role-panel');
+    document.querySelectorAll('[data-role]').forEach(button => button.addEventListener('click', () => {
+      const view = roleViews[button.dataset.role];
+      document.querySelectorAll('[data-role]').forEach(card => card.classList.toggle('active', card === button));
+      rolePanel.innerHTML = `<h3>${view.title}</h3><p>${view.text}</p><div class="role-links">${view.links.map(([label, href]) => `<a href="${href}">${label} →</a>`).join('')}</div>`;
+      rolePanel.classList.add('visible');
+    }));
+    const schedule = [
+      ['07:00','Hair & makeup artist arrives'], ['07:15','Mother of the groom — hair'], ['08:00','Mother of the bride — hair'], ['08:45','Bride — hair'], ['09:30','Mother of the bride — makeup'], ['10:15','Bride — makeup'], ['11:00','Genevieve — hair'], ['11:30','Connie — hair'], ['12:00','Final touch-ups'], ['12:30','Day guests arrive'], ['13:00','Ceremony begins'], ['13:30','Priory Park photographs'], ['14:00','Drinks reception begins'], ['15:00','Guests take their seats'], ['15:30','Speeches'], ['16:00','Wedding breakfast service'], ['18:00','Evening set-up begins'], ['19:00','Evening guest arrivals'], ['19:30','Cake cutting & first dance'], ['20:30','Evening food is served'], ['23:00','Music finishes'], ['23:30','Last orders']
+    ];
+    const nowNext = document.querySelector('#now-next');
+    function updateNowNext() {
+      const now = new Date(); const weddingDate = new Date(2026, 7, 22);
+      const sameDay = now.getFullYear() === 2026 && now.getMonth() === 7 && now.getDate() === 22;
+      if (!sameDay) { nowNext.textContent = `22 August 2026 · First timing: ${schedule[0][0]} — ${schedule[0][1]}`; return; }
+      const minutes = now.getHours() * 60 + now.getMinutes();
+      const next = schedule.find(([time]) => { const [h,m] = time.split(':').map(Number); return h * 60 + m > minutes; });
+      const previous = [...schedule].reverse().find(([time]) => { const [h,m] = time.split(':').map(Number); return h * 60 + m <= minutes; });
+      nowNext.textContent = next ? `Now: ${previous ? previous[1] : 'Pre-ceremony preparations'} · Next: ${next[0]} — ${next[1]}` : 'Wedding day schedule complete.';
+    }
+    updateNowNext(); setInterval(updateNowNext, 60000);
+    const sectionLinks = document.querySelectorAll('nav a');
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) sectionLinks.forEach(link => link.classList.toggle('current', link.getAttribute('href') === '#' + entry.target.id));
+    }), { rootMargin:'-35% 0px -55% 0px' });
+    document.querySelectorAll('main section').forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

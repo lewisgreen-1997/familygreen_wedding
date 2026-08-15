@@ -1,0 +1,10 @@
+# Source documents and visual references stay local/private.
+*.pdf
+stylereference*.jpg
+.~lock.*
+
+# Local tooling and editor files.
+.DS_Store
+Thumbs.db
+.vscode/
+node_modules/
