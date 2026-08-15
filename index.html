@@ -160,39 +160,41 @@
   </aside>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
   <script src="wedding-data.js"></script>
+  <script src="wedding-plan.js"></script>
   <script>
-    const PLAN_VERSION = 'empty-timeline-2026-08-14';
+    const PLAN_VERSION = 'repository-plan-2026-08-15';
+    const sourcePlan = window.WEDDING_PLAN_DATA || window.WEDDING_DATA;
     const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
     const shouldResetPlan = localStorage.getItem('megan-lewis-wedding-plan-version') !== PLAN_VERSION;
-    const timelineData = !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(window.WEDDING_DATA);
+    const timelineData = !shouldResetPlan && savedPlan ? JSON.parse(savedPlan) : structuredClone(sourcePlan);
     if (shouldResetPlan) {
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
       localStorage.setItem('megan-lewis-wedding-plan-version', PLAN_VERSION);
     }
-    const cottageLocation = window.WEDDING_DATA.entities.find(entity => entity.id === 'cottage');
+    const cottageLocation = sourcePlan.entities.find(entity => entity.id === 'cottage');
     if (cottageLocation && !timelineData.entities.some(entity => entity.id === cottageLocation.id)) {
       timelineData.entities.push(structuredClone(cottageLocation));
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
     }
-    const masterOfCeremonies = window.WEDDING_DATA.entities.find(entity => entity.id === 'moc');
+    const masterOfCeremonies = sourcePlan.entities.find(entity => entity.id === 'moc');
     if (masterOfCeremonies && !timelineData.entities.some(entity => entity.id === masterOfCeremonies.id)) {
       timelineData.entities.push(structuredClone(masterOfCeremonies));
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
     }
-    const lewisContact = window.WEDDING_DATA.entities.find(entity => entity.id === 'lewis');
+    const lewisContact = sourcePlan.entities.find(entity => entity.id === 'lewis');
     if (lewisContact && !timelineData.entities.some(entity => entity.id === lewisContact.id)) {
       timelineData.entities.push(structuredClone(lewisContact));
       localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
     }
     let periodsUpdated = false;
-    window.WEDDING_DATA.periods.forEach(sourcePeriod => {
+    sourcePlan.periods.forEach(sourcePeriod => {
       const currentPeriod = timelineData.periods.find(period => period.id === sourcePeriod.id);
       if (currentPeriod) {
         if (currentPeriod.name !== sourcePeriod.name || currentPeriod.order !== sourcePeriod.order) { Object.assign(currentPeriod, structuredClone(sourcePeriod)); periodsUpdated = true; }
       } else { timelineData.periods.push(structuredClone(sourcePeriod)); periodsUpdated = true; }
     });
     if (periodsUpdated) localStorage.setItem('megan-lewis-wedding-plan', JSON.stringify(timelineData));
-    const groupPhotographyPeriodEntity = window.WEDDING_DATA.entities.find(entity => entity.id === 'period-group-photos');
+    const groupPhotographyPeriodEntity = sourcePlan.entities.find(entity => entity.id === 'period-group-photos');
     const savedGroupPhotographyPeriodEntity = timelineData.entities.find(entity => entity.id === 'period-group-photos');
     if (groupPhotographyPeriodEntity && !savedGroupPhotographyPeriodEntity) {
       timelineData.entities.push(structuredClone(groupPhotographyPeriodEntity));
@@ -236,7 +238,7 @@
     }).join('');
     timelineView.innerHTML = `<span class="section-kicker">Wedding day operations · ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
     const dayline = timelineView.querySelector('.dayline');
-    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" class="plan-export" data-export-plan>Export plan data</button></div>');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button></div>');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
     operationalMap.setAttribute('aria-live', 'polite');
@@ -293,11 +295,6 @@
       dayline.hidden = true; operationalMap.classList.add('active');
     }
     timelineView.addEventListener('click', event => {
-      const exportTrigger = event.target.closest('[data-export-plan]');
-      if (exportTrigger) {
-        const blob = new Blob([JSON.stringify(timelineData, null, 2)], { type:'application/json' });
-        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'lewis-megan-wedding-plan.json'; link.click(); URL.revokeObjectURL(link.href); return;
-      }
       const viewButton = event.target.closest('[data-timeline-view]');
       if (viewButton) { timelineView.querySelectorAll('[data-timeline-view]').forEach(button => button.classList.toggle('active', button === viewButton)); renderOperationalViews(viewButton.dataset.timelineView); return; }
       const mapEvent = event.target.closest('[data-map-event-id]');

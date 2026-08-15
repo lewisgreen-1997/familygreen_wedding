@@ -21,4 +21,4 @@ Then open `http://localhost:8080`.
 
 The site is entirely static: it has no authentication or server-side runtime. Timeline edits are stored in the browser’s local storage, so they are specific to the browser/device used to edit them.
 
-Use **Export plan data** in the timeline navigation to download the current browser plan as JSON. This is the migration path for committing the plan data to the repository.
+The committed plan snapshot is loaded from `wedding-plan.js` when the site is first opened on a browser or device.
