@@ -185,6 +185,15 @@
       });
       if (!response.ok) throw new Error(`Shared plan save failed (${response.status})`);
     }
+    async function uploadDecorationImage(file) {
+      if (!file) return '';
+      if (!file.type.startsWith('image/') || file.size > 10485760) throw new Error('Choose a JPG, PNG, WebP or GIF image under 10 MB.');
+      const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `items/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+      const response = await fetch(`${sharedStore.url}/storage/v1/object/${sharedStore.decorationBucket}/${path}`, { method:'POST', headers:{ ...sharedHeaders, 'Content-Type':file.type, 'x-upsert':'false' }, body:file });
+      if (!response.ok) throw new Error(`Image upload failed (${response.status})`);
+      return `${sharedStore.url}/storage/v1/object/public/${sharedStore.decorationBucket}/${path}`;
+    }
     const remotePlan = await loadSharedPlan();
     const savedPlan = localStorage.getItem('megan-lewis-wedding-plan');
     const emptyPlan = { wedding:{ date:'', venue:'', couple:'' }, periods:[], entities:[], events:[], eventDetails:[], relationships:[], decorationLayouts:[] };
@@ -398,7 +407,7 @@
     editModal.innerHTML = '<div class="edit-dialog" role="dialog" aria-modal="true"></div>';
     document.body.appendChild(editModal);
     const editDialog = editModal.querySelector('.edit-dialog');
-    const decorationAssignmentFields = assignment => `<fieldset class="decor-assignment-fields"><label>Period<select name="decorationPeriodId">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === assignment.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label>Set up<textarea name="decorationSetup" placeholder="e.g. Along the ceremony fireplace">${assignment.setup || ''}</textarea></label><label>Movement to next period<textarea name="decorationMovements" placeholder="e.g. Move to the wedding breakfast top table after the ceremony">${assignment.movements || ''}</textarea></label><label>Reference photo URL (optional)<input name="decorationPhotoUrl" type="url" value="${assignment.photoUrl || ''}" placeholder="https://…"></label><button class="decor-assignment-remove" type="button" data-remove-decoration-assignment>Remove assignment</button></fieldset>`;
+    const decorationAssignmentFields = assignment => `<fieldset class="decor-assignment-fields"><label>Period<select name="decorationPeriodId">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === assignment.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label>Set up<textarea name="decorationSetup" placeholder="e.g. Along the ceremony fireplace">${assignment.setup || ''}</textarea></label><label>Movement to next period<textarea name="decorationMovements" placeholder="e.g. Move to the wedding breakfast top table after the ceremony">${assignment.movements || ''}</textarea></label><label>Reference photo URL (optional)<input name="decorationPhotoUrl" type="url" value="${assignment.photoUrl || ''}" placeholder="https://…"></label><label>Or upload a reference photo<input name="decorationPhotoFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><button class="decor-assignment-remove" type="button" data-remove-decoration-assignment>Remove assignment</button></fieldset>`;
     function openDecorationItemEditor(itemId) {
       const item = itemId ? timelineData.decorationItems.find(record => record.id === itemId) : null;
       const assignments = item?.assignments?.length ? item.assignments : [{ periodId:timelineData.periods[0]?.id || '', setup:'', movements:'', photoUrl:'' }];
@@ -415,7 +424,9 @@
         const record = item || { id:`decoration-${Date.now()}` };
         record.name = form.get('decorationName').trim();
         const rows = [...assignmentList.querySelectorAll('.decor-assignment-fields')];
-        record.assignments = rows.map(row => ({ id:row.dataset.assignmentId || `assignment-${Date.now()}-${Math.random().toString(36).slice(2,7)}`, periodId:row.querySelector('[name="decorationPeriodId"]').value, setup:row.querySelector('[name="decorationSetup"]').value.trim(), movements:row.querySelector('[name="decorationMovements"]').value.trim(), photoUrl:row.querySelector('[name="decorationPhotoUrl"]').value.trim() }));
+        try {
+          record.assignments = await Promise.all(rows.map(async row => { const uploadedUrl = await uploadDecorationImage(row.querySelector('[name="decorationPhotoFile"]').files[0]); return { id:row.dataset.assignmentId || `assignment-${Date.now()}-${Math.random().toString(36).slice(2,7)}`, periodId:row.querySelector('[name="decorationPeriodId"]').value, setup:row.querySelector('[name="decorationSetup"]').value.trim(), movements:row.querySelector('[name="decorationMovements"]').value.trim(), photoUrl:uploadedUrl || row.querySelector('[name="decorationPhotoUrl"]').value.trim() }; }));
+        } catch (error) { alert(error.message); return; }
         if (!item) timelineData.decorationItems.push(record);
         await persistPlan(); editModal.hidden = true; renderOperationalViews('decorations');
       });

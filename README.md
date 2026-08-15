@@ -28,3 +28,5 @@ The shared Supabase record is the live source of truth. The browser keeps a loca
 The site is configured to use Supabase for a shared editable plan. Run [`supabase/schema.sql`](supabase/schema.sql) once in the Supabase SQL Editor, then the site loads and saves the shared plan directly.
 
 This configuration intentionally allows anonymous editing, appropriate only for a small trusted group. The repository contains the publishable key only; never add a Supabase secret key to this project.
+
+For decoration image uploads, run [`supabase/storage.sql`](supabase/storage.sql) once in the Supabase SQL Editor. Uploaded images are stored in the `wedding-decor` Supabase Storage bucket and their persistent URLs are saved with the corresponding decoration assignment.
