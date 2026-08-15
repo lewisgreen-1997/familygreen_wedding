@@ -191,7 +191,10 @@
       const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
       const path = `items/${Date.now()}-${crypto.randomUUID()}.${extension}`;
       const response = await fetch(`${sharedStore.url}/storage/v1/object/${sharedStore.decorationBucket}/${path}`, { method:'POST', headers:{ ...sharedHeaders, 'Content-Type':file.type, 'x-upsert':'false' }, body:file });
-      if (!response.ok) throw new Error(`Image upload failed (${response.status})`);
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(`Image upload failed: ${detail || `HTTP ${response.status}`}`);
+      }
       return `${sharedStore.url}/storage/v1/object/public/${sharedStore.decorationBucket}/${path}`;
     }
     const remotePlan = await loadSharedPlan();
