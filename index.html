@@ -65,6 +65,7 @@
     @media(min-width:701px) { .period-header { display:grid; grid-template-columns:minmax(0,1fr) 150px 205px; } .period-add { margin-left:0; justify-self:center; } .period-decor { margin-left:0; justify-self:end; } }
     @media(min-width:701px) { .time-point summary { padding-right:360px; } .time-point:not([open]) summary { padding-right:360px; } .event-actions { z-index:3; right:12px; } .event-owner-wrap { right:50px; max-width:300px; } .event-owner-pill { white-space:nowrap; } }
     .time-point[open] summary:after,.sub-event[open] summary:after,.period-toggle:before,.nav-group[open] summary:after,.decor-item[open] > summary:after { content:'-' !important; }
+    .timeline-expand-controls { display:flex; gap:7px; margin:0 0 14px; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; }
   </style>
 </head>
 <body class="timeline-only">
@@ -242,7 +243,7 @@
     }).join('');
     timelineView.innerHTML = `<span class="section-kicker">Wedding day operations Ãƒâ€š&middot; ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
     const dayline = timelineView.querySelector('.dayline');
-    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div>');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button></div>');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
     operationalMap.setAttribute('aria-live', 'polite');
@@ -306,6 +307,10 @@
       dayline.hidden = true; operationalMap.classList.add('active');
     }
     timelineView.addEventListener('click', event => {
+      const expandPeriods = event.target.closest('[data-expand-periods]');
+      if (expandPeriods) { timelineView.querySelectorAll('.period-group').forEach(period => period.classList.remove('collapsed')); return; }
+      const collapsePeriods = event.target.closest('[data-collapse-periods]');
+      if (collapsePeriods) { timelineView.querySelectorAll('.period-group').forEach(period => period.classList.add('collapsed')); return; }
       const viewButton = event.target.closest('[data-timeline-view]');
       if (viewButton) { timelineView.querySelectorAll('[data-timeline-view]').forEach(button => button.classList.toggle('active', button === viewButton)); renderOperationalViews(viewButton.dataset.timelineView); return; }
       const decorationAdd = event.target.closest('[data-decoration-add]');
