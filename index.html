@@ -174,7 +174,8 @@
     const api = async (path, options = {}) => {
       const response = await fetch(`${sharedStore.url}/rest/v1/${path}`, { ...options, headers: { ...sharedHeaders, ...options.headers } });
       if (!response.ok) throw new Error(`Shared store request failed (${response.status})`);
-      return response.status === 204 ? null : response.json();
+      const body = await response.text();
+      return body ? JSON.parse(body) : null;
     };
     const collectionTables = [
       ['wedding_periods', 'periods'], ['wedding_entities', 'entities'], ['wedding_events', 'events'],
