@@ -69,6 +69,7 @@
     .sub-event p[data-inline-field="detail"] { white-space:pre-wrap; }
     .time-point[open] summary:after,.sub-event[open] summary:after,.period-toggle:before,.nav-group[open] summary:after,.decor-item[open] > summary:after { content:'-' !important; }
     .timeline-expand-controls { display:flex; gap:7px; margin:0 0 14px; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; }
+    .map-view-head,.map-export-row { display:flex; align-items:center; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.map-export-row button { margin-left:auto; padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .map-export-row { width:min(320px,100%); margin:-5px auto 12px; } .map-export-row button { margin-left:0; } @media(max-width:700px) { .map-view-head { align-items:flex-start; flex-direction:column; } .map-view-head button { margin-left:0; } }
   </style>
 </head>
 <body class="timeline-only">
@@ -275,7 +276,7 @@
     }).join('');
     timelineView.innerHTML = `<span class="section-kicker">Wedding day operations &middot; ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
     const dayline = timelineView.querySelector('.dayline');
-    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button></div>');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button><button type="button" data-export-master>Export master timeline</button></div>');
     const periodControls = timelineView.querySelector('.timeline-expand-controls');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
@@ -299,6 +300,42 @@
     const eventLocation = event => event.locationId ? entityById[event.locationId]?.name || 'Unassigned' : 'Unassigned';
     const eventPeople = event => [...new Set(['owner', 'informed'].flatMap(role => eventEntityIds(event.id, role)))].map(id => entityById[id]).filter(Boolean);
     function eventWorkstream(event) { return event.workstream || ''; }
+    const workstreamOrder = ['Guest Flow','Music','Morning Logistics','Food & Beverage'];
+    const escapePrint = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[character]);
+    const exportEventMarkup = event => {
+      const location = event.locationId ? entityById[event.locationId] : null;
+      const peopleForRole = role => eventEntityIds(event.id, role).map(id => entityById[id]).filter(Boolean).map(entity => escapePrint(entity.name));
+      const details = detailsFor(event.id);
+      const meta = [location ? `Location: ${escapePrint(location.name)}` : '', peopleForRole('owner').length ? `Owner: ${peopleForRole('owner').join(', ')}` : '', peopleForRole('informed').length ? `Informed: ${peopleForRole('informed').join(', ')}` : ''].filter(Boolean);
+      return `<article class="print-event"><header><time>${escapePrint(event.time)}</time><h3>${escapePrint(event.title)}</h3></header>${meta.length ? `<p class="print-meta">${meta.join(' &nbsp;&middot;&nbsp; ')}</p>` : ''}<div class="print-details">${details.map(detail => { const linked = relationsFor(detail.id).filter(relation => !['owner','informed','location','period'].includes(relation.role)).map(relation => entityById[relation.entityId]?.name).filter(Boolean); return `<section><span>${escapePrint(detail.category)}</span><h4>${escapePrint(detail.title || detail.text.split('. ')[0])}</h4><p>${escapePrint(detail.text)}</p>${linked.length ? `<small>Related: ${linked.map(escapePrint).join(', ')}</small>` : ''}</section>`; }).join('') || '<p class="print-empty">No event detail recorded.</p>'}</div></article>`;
+    };
+    const exportPeriodsMarkup = events => [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => {
+      const periodEvents = events.filter(event => event.periodId === period.id).sort((a, b) => a.sort - b.sort || a.title.localeCompare(b.title));
+      return periodEvents.length ? `<section class="print-period"><h2>${escapePrint(period.name)}</h2>${periodEvents.map(exportEventMarkup).join('')}</section>` : '';
+    }).join('');
+    function openPdfExport(title, subtitle, content) {
+      const exportWindow = window.open('', '_blank');
+      if (!exportWindow) { alert('Please allow pop-ups to export this PDF.'); return; }
+      exportWindow.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${escapePrint(title)}</title><style>@page{size:A4;margin:15mm}*{box-sizing:border-box}body{margin:0;color:#102b42;background:#fff;font-family:Georgia,'Times New Roman',serif;font-size:10.5pt;line-height:1.42}.document-header{padding:0 0 18px;border-bottom:2px solid #789aba}.kicker,.print-period>h2,.print-details span{font:700 8pt Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#356b9f}.kicker{margin:0 0 7px}.document-header h1{margin:0;color:#102b42;font-size:30pt;font-weight:normal;line-height:1.05}.document-header p{margin:8px 0 0;color:#536b7e}.print-period{margin:22px 0 0;break-inside:avoid}.print-period>h2{margin:0;padding:0 0 6px;border-bottom:1px solid #b7ccde;font-size:9pt}.print-event{margin:0;padding:13px 0;border-bottom:1px solid #d6e2eb;break-inside:avoid}.print-event header{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:baseline}.print-event time{color:#376d9e;font:700 8.5pt Arial,sans-serif}.print-event h3{margin:0;color:#102b42;font-size:15pt;font-weight:normal}.print-meta{margin:6px 0 0;color:#486278;font:8pt Arial,sans-serif}.print-details{margin:9px 0 0;padding:9px 11px;background:#f6f9fc;border-left:3px solid #86a9c7}.print-details section+section{margin-top:9px;padding-top:9px;border-top:1px solid #d7e4ed}.print-details h4{margin:2px 0 0;color:#183b57;font-size:11pt}.print-details p{margin:3px 0 0;white-space:pre-wrap}.print-details small{display:block;margin-top:5px;color:#5d7588;font:8pt Arial,sans-serif}.print-empty{margin:0;color:#647b8d}@media print{.print-period{break-inside:auto}.print-event{break-inside:avoid}}</style></head><body><header class="document-header"><p class="kicker">Wedding day operations &middot; ${escapePrint(timelineData.wedding.date)}</p><h1>${escapePrint(title)}</h1><p>${escapePrint(subtitle)}</p></header>${content}</body></html>`);
+      exportWindow.document.close();
+      exportWindow.focus();
+      setTimeout(() => exportWindow.print(), 300);
+    }
+    function exportMasterTimeline() { openPdfExport('Master timeline', "Full operational run-sheet for Lewis and Megan's wedding day.", exportPeriodsMarkup(timelineData.events)); }
+    function exportSelectedPerson() {
+      const personId = operationalMap.dataset.personId;
+      const person = entityById[personId];
+      if (!person) { alert('Choose a person or supplier first.'); return; }
+      const events = timelineData.events.filter(event => eventPeople(event).some(item => item.id === personId));
+      openPdfExport(`${person.name} schedule`, 'Full event detail for the selected person or supplier.', exportPeriodsMarkup(events));
+    }
+    function exportWorkstreams() {
+      const content = workstreamOrder.map(workstream => {
+        const events = timelineData.events.filter(event => eventWorkstream(event) === workstream);
+        return events.length ? `<section class="print-period"><h2>${escapePrint(workstream)}</h2>${exportPeriodsMarkup(events)}</section>` : '';
+      }).join('');
+      openPdfExport('Workstreams', 'Cross-functional operational run-sheets with full event detail.', content || '<p class="print-empty">No workstream events have been assigned.</p>');
+    }
     function mapEventMarkup(event) {
       const location = event.locationId ? entityById[event.locationId] : null;
       const detailRecords = detailsFor(event.id);
@@ -322,7 +359,7 @@
         const selectedId = people.has(operationalMap.dataset.personId) ? operationalMap.dataset.personId : orderedPeople[0]?.person.id;
         const selected = people.get(selectedId);
         const periodColumns = selected ? [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => ({ period, events:selected.events.filter(event => event.periodId === period.id) })).filter(column => column.events.length) : [];
-        operationalMap.innerHTML = `<label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
+        operationalMap.innerHTML = `<label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label>${selected ? `<div class="map-export-row"><button type="button" data-export-person>Export selected person</button></div><section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
         dayline.hidden = true; operationalMap.classList.add('active'); if (window.lucide) window.lucide.createIcons(); return;
       }
       if (view === 'decorations') {
@@ -339,12 +376,14 @@
       if (view === 'workstream') events.forEach(event => { const workstream = eventWorkstream(event); if (workstream) addToGroup(workstream, event); });
       if (view === 'location') events.forEach(event => addToGroup(eventLocation(event), event));
       const viewLabels = { workstream:'Workstreams', location:'Locations' };
-      const workstreamOrder = ['Guest Flow','Music','Morning Logistics','Food & Beverage'];
       const orderedGroups = [...groups.entries()].sort(([nameA, itemsA], [nameB, itemsB]) => view === 'location' ? (itemsA.reduce((total, event) => total + event.sort, 0) / itemsA.length) - (itemsB.reduce((total, event) => total + event.sort, 0) / itemsB.length) || nameA.localeCompare(nameB) : view === 'workstream' ? workstreamOrder.indexOf(nameA) - workstreamOrder.indexOf(nameB) : nameA.localeCompare(nameB));
-      operationalMap.innerHTML = `<p class="map-note">${viewLabels[view]} view &middot; open an event to view its full detail.</p><div class="map-lanes">${orderedGroups.map(([name, items]) => `<section class="map-lane"><h3>${name}</h3>${items.map(mapEventMarkup).join('')}</section>`).join('') || '<p class="map-note">No events have been added yet.</p>'}</div>`;
+      operationalMap.innerHTML = `<div class="map-view-head"><p class="map-note">${viewLabels[view]} view &middot; open an event to view its full detail.</p>${view === 'workstream' ? '<button type="button" data-export-workstreams>Export workstreams</button>' : ''}</div><div class="map-lanes">${orderedGroups.map(([name, items]) => `<section class="map-lane"><h3>${name}</h3>${items.map(mapEventMarkup).join('')}</section>`).join('') || '<p class="map-note">No events have been added yet.</p>'}</div>`;
       dayline.hidden = true; operationalMap.classList.add('active'); if (window.lucide) window.lucide.createIcons();
     }
     timelineView.addEventListener('click', event => {
+      if (event.target.closest('[data-export-master]')) { exportMasterTimeline(); return; }
+      if (event.target.closest('[data-export-person]')) { exportSelectedPerson(); return; }
+      if (event.target.closest('[data-export-workstreams]')) { exportWorkstreams(); return; }
       const expandPeriods = event.target.closest('[data-expand-periods]');
       if (expandPeriods) { timelineView.querySelectorAll('.period-group').forEach(period => period.classList.remove('collapsed')); return; }
       const collapsePeriods = event.target.closest('[data-collapse-periods]');
