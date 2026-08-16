@@ -296,18 +296,7 @@
     };
     const eventLocation = event => event.locationId ? entityById[event.locationId]?.name || 'Unassigned' : 'Unassigned';
     const eventPeople = event => [...new Set(['owner', 'informed'].flatMap(role => eventEntityIds(event.id, role)))].map(id => entityById[id]).filter(Boolean);
-    function eventWorkstream(event) {
-      if (event.workstream) return event.workstream;
-      const detailText = detailsFor(event.id).map(detail => `${detail.category} ${detail.title || ''} ${detail.text}`).join(' ');
-      const search = `${event.title} ${detailText}`.toLowerCase();
-      if (/hair|makeup|hmu/.test(search)) return 'HMU';
-      if (/music|cellist|dj|disco|dance|playlist/.test(search)) return 'Music';
-      if (/photo|photograph|confetti/.test(search)) return 'Photography';
-      if (/food|meal|canap|drink|catering|bar/.test(search)) return 'Food & drinks';
-      if (/decor|flower|floral|room|table|setup/.test(search)) return 'Venue & decor';
-      if (/travel|arrival|leave|logistic/.test(search)) return 'Logistics';
-      return 'General';
-    }
+    function eventWorkstream(event) { return event.workstream || ''; }
     function mapEventMarkup(event) {
       const location = event.locationId ? entityById[event.locationId] : null;
       const detailRecords = detailsFor(event.id);
@@ -345,7 +334,7 @@
       }
       const groups = new Map();
       const addToGroup = (key, event) => { if (!groups.has(key)) groups.set(key, []); groups.get(key).push(event); };
-      if (view === 'workstream') events.forEach(event => addToGroup(eventWorkstream(event), event));
+      if (view === 'workstream') events.forEach(event => { const workstream = eventWorkstream(event); if (workstream) addToGroup(workstream, event); });
       if (view === 'location') events.forEach(event => addToGroup(eventLocation(event), event));
       const viewLabels = { workstream:'Workstreams', location:'Locations' };
       const orderedGroups = [...groups.entries()].sort(([nameA, itemsA], [nameB, itemsB]) => view === 'location' ? (itemsA.reduce((total, event) => total + event.sort, 0) / itemsA.length) - (itemsB.reduce((total, event) => total + event.sort, 0) / itemsB.length) || nameA.localeCompare(nameB) : nameA.localeCompare(nameB));
@@ -377,8 +366,8 @@
       const informedIds = eventEntityIds(event.id, 'informed');
       const contacts = timelineData.entities.filter(entity => !['period', 'location'].includes(entity.type));
       const locations = timelineData.entities.filter(entity => entity.type === 'location');
-      const workstreams = ['','HMU','Music','Photography','Food & drinks','Venue & decor','Logistics','General'];
-      return `<label class="inline-relation-field">Period<select data-inline-period-event-id="${event.id}">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === event.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Workstream<select data-inline-workstream-event-id="${event.id}">${workstreams.map(workstream => `<option value="${workstream}" ${workstream === (event.workstream || '') ? 'selected' : ''}>${workstream || 'Auto-detect'}</option>`).join('')}</select></label>`;
+      const workstreams = ['','Music','Guest flow & announcements','Venue transitions','Morning logistics'];
+      return `<label class="inline-relation-field">Period<select data-inline-period-event-id="${event.id}">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === event.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Workstream<select data-inline-workstream-event-id="${event.id}">${workstreams.map(workstream => `<option value="${workstream}" ${workstream === (event.workstream || '') ? 'selected' : ''}>${workstream || 'No workstream'}</option>`).join('')}</select></label>`;
     }
     function renderInlineRelationControls(scope = timelineView) {
       scope.querySelectorAll('.inline-relation-actions').forEach(container => {
@@ -518,8 +507,8 @@
       const rootOptions = `<option value="">Choose a series</option>${timelineData.events.filter(item => item.sequence?.type === 'root' && item.id !== event?.id).map(item => `<option value="${item.id}" ${sequence.rootId === item.id ? 'selected' : ''}>${item.title}</option>`).join('')}`;
       editDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">${event ? 'Edit event' : 'New event'}</span><h2>${event ? event.title : 'Add new event'}</h2><form class="edit-form" id="event-form"><label>Time<input name="time" type="time" value="${event ? inputTime(event.time) : ''}"></label><label>Period<select name="periodId" required>${periodOptions}</select></label><label class="wide">Event name<input name="title" required value="${event?.title || ''}"></label><label>Location<select name="locationId">${locationOptions}</select></label><label class="check">Major transition<input name="major" type="checkbox" ${event?.major ? 'checked' : ''}></label><label>Detail category<select name="category">${categoryOptions}</select></label><label>Event flow<select name="sequenceType" id="sequence-type"><option value="independent" ${sequence.type === 'independent' ? 'selected' : ''}>This is its own event</option><option value="root" ${sequence.type === 'root' ? 'selected' : ''}>This begins a series of steps</option><option value="step" ${sequence.type === 'step' ? 'selected' : ''}>This is part of a series</option></select></label><div class="sequence-step-fields" id="sequence-step-fields" ${sequence.type === 'step' ? '' : 'hidden'}><label>This series<select name="sequenceRootId">${rootOptions}</select></label><label>Position in the series<input name="sequenceOrder" type="number" min="1" value="${sequence.order || ''}"></label></div><label>Owner<select name="ownerId">${ownerOptions}</select></label><div class="informed-field"><label>Informed<select name="informedIds" multiple>${informedOptions}</select></label><button type="button" class="add-contact" id="add-contact">+ Add contact</button></div><label class="wide">Event detail<textarea name="detailText" required>${detail?.text || ''}</textarea></label><div class="form-actions">${event ? `<button type="button" class="form-delete" data-form-delete-id="${event.id}">Delete event</button>` : ''}<button type="button" class="decor-close">Cancel</button><button type="submit">Save event</button></div></form>`;
       const workstreamField = document.createElement('label');
-      const workstreams = ['','HMU','Music','Photography','Food & drinks','Venue & decor','Logistics','General'];
-      workstreamField.innerHTML = `Workstream<select name="workstream">${workstreams.map(item => `<option value="${item}" ${item === (event?.workstream || '') ? 'selected' : ''}>${item || 'Auto-detect'}</option>`).join('')}</select>`;
+      const workstreams = ['','Music','Guest flow & announcements','Venue transitions','Morning logistics'];
+      workstreamField.innerHTML = `Workstream<select name="workstream">${workstreams.map(item => `<option value="${item}" ${item === (event?.workstream || '') ? 'selected' : ''}>${item || 'No workstream'}</option>`).join('')}</select>`;
       editDialog.querySelector('[name="category"]').closest('label').after(workstreamField);
       editModal.hidden = false;
       editDialog.querySelector('.decor-close').focus();
