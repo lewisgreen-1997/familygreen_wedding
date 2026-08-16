@@ -197,6 +197,8 @@
     async function syncCollection(table, key, records) {
       const desired = records.filter(Boolean).map(record => ({ id: rowIdFor(key, record), wedding_id: sharedStore.planId, data: record, updated_at: new Date().toISOString() }));
       if (desired.length) await api(`${table}?on_conflict=id`, { method:'POST', headers:{ 'Content-Type':'application/json', Prefer:'resolution=merge-duplicates,return=minimal' }, body:JSON.stringify(desired) });
+      // Shared people and locations may be added from another session; never let a stale browser remove them.
+      if (table === 'wedding_entities' || table === 'wedding_periods') return;
       const existing = await api(`${table}?wedding_id=eq.${encodeURIComponent(sharedStore.planId)}&select=id`);
       await Promise.all(existing.filter(row => !desired.some(item => item.id === row.id)).map(row => api(`${table}?id=eq.${encodeURIComponent(row.id)}`, { method:'DELETE', headers:{ Prefer:'return=minimal' } })));
     }
