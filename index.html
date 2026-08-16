@@ -69,7 +69,7 @@
     .sub-event p[data-inline-field="detail"] { white-space:pre-wrap; }
     .time-point[open] summary:after,.sub-event[open] summary:after,.period-toggle:before,.nav-group[open] summary:after,.decor-item[open] > summary:after { content:'-' !important; }
     .timeline-expand-controls { display:flex; gap:7px; margin:0 0 14px; } .timeline-expand-controls[hidden] { display:none !important; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; }
-    .map-view-head,.person-view-toolbar { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.person-view-toolbar button { padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .person-view-toolbar .person-picker { width:min(380px,100%); margin:0; } @media(max-width:700px) { .map-view-head,.person-view-toolbar { align-items:flex-start; flex-direction:column; } }
+    .map-view-head,.person-view-toolbar { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.person-view-toolbar button { padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .person-view-toolbar .person-picker { width:min(380px,100%); margin:0; } .person-toolbar-actions { display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end; } .contact-directory { display:grid; gap:9px; } .contact-directory-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 6px; } .contact-directory-head p { margin:0; color:#6386a5; font-size:.88rem; } .contact-entry { display:grid; grid-template-columns:1.1fr .72fr .8fr .95fr 1.2fr; gap:8px; padding:10px; border:1px solid #d6e3ed; background:#f8fbfd; } .contact-entry label { display:grid; gap:4px; color:#527a9f; font:700 .54rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .contact-entry input,.contact-entry select { width:100%; min-width:0; padding:7px 8px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:1rem 'Cormorant Garamond',Georgia,serif; } .contact-add { justify-self:start; padding:7px 9px; font-size:.6rem; } @media(max-width:760px) { .map-view-head,.person-view-toolbar { align-items:flex-start; flex-direction:column; } .person-toolbar-actions { justify-content:flex-start; } .contact-entry { grid-template-columns:1fr 1fr; } }
   </style>
 </head>
 <body class="timeline-only">
@@ -363,7 +363,7 @@
         const selectedId = people.has(operationalMap.dataset.personId) ? operationalMap.dataset.personId : orderedPeople[0]?.person.id;
         const selected = people.get(selectedId);
         const periodColumns = selected ? [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => ({ period, events:selected.events.filter(event => event.periodId === period.id) })).filter(column => column.events.length) : [];
-        operationalMap.innerHTML = `<div class="person-view-toolbar"><label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label>${selected ? '<button type="button" data-export-person>Export selected person</button>' : ''}</div>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
+        operationalMap.innerHTML = `<div class="person-view-toolbar"><label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label><div class="person-toolbar-actions"><button type="button" data-open-contacts>Contacts</button>${selected ? '<button type="button" data-export-person>Export selected person</button>' : ''}</div></div>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
         dayline.hidden = true; operationalMap.classList.add('active'); if (window.lucide) window.lucide.createIcons(); return;
       }
       if (view === 'decorations') {
@@ -388,6 +388,7 @@
       if (event.target.closest('[data-export-master]')) { exportMasterTimeline(); return; }
       if (event.target.closest('[data-export-person]')) { exportSelectedPerson(); return; }
       if (event.target.closest('[data-export-workstreams]')) { exportWorkstreams(); return; }
+      if (event.target.closest('[data-open-contacts]')) { openContactDirectory(); return; }
       const expandPeriods = event.target.closest('[data-expand-periods]');
       if (expandPeriods) { timelineView.querySelectorAll('.period-group').forEach(period => period.classList.remove('collapsed')); return; }
       const collapsePeriods = event.target.closest('[data-collapse-periods]');
@@ -505,6 +506,38 @@
     editModal.innerHTML = '<div class="edit-dialog" role="dialog" aria-modal="true"></div>';
     document.body.appendChild(editModal);
     const editDialog = editModal.querySelector('.edit-dialog');
+    const contactEntryMarkup = entity => `<div class="contact-entry" data-contact-id="${entity.id || ''}" data-contact-icon="${entity.icon || 'user-round'}"><label>Name<input name="contactName" required value="${entity.name || ''}" placeholder="Name"></label><label>Type<select name="contactType"><option value="person" ${entity.type === 'person' ? 'selected' : ''}>Person</option><option value="supplier" ${entity.type === 'supplier' ? 'selected' : ''}>Supplier</option></select></label><label>Role<input name="contactRole" value="${entity.role || ''}" placeholder="e.g. Master of Ceremonies"></label><label>Phone<input name="contactPhone" type="tel" value="${entity.phone || ''}" placeholder="Phone number"></label><label>Website or link<input name="contactWebsite" type="url" value="${entity.website || ''}" placeholder="https://..."></label></div>`;
+    function openContactDirectory() {
+      const contacts = timelineData.entities.filter(entity => !['location', 'period'].includes(entity.type)).sort((left, right) => left.name.localeCompare(right.name));
+      editDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">Shared records</span><h2>Contacts</h2><p class="editor-note">Manage the names, roles, phone numbers and links available throughout the wedding plan.</p><form class="contact-directory" id="contact-directory-form"><div class="contact-directory-head"><span>Contact details</span><button type="button" class="contact-add" data-add-contact>+ Add contact</button></div><div data-contact-list>${contacts.map(contactEntryMarkup).join('')}</div><div class="form-actions"><button type="button" class="decor-close">Cancel</button><button type="submit">Save contacts</button></div></form>`;
+      editModal.hidden = false;
+      editDialog.querySelector('.decor-close').focus();
+      editDialog.querySelectorAll('.decor-close').forEach(button => button.addEventListener('click', () => { editModal.hidden = true; }));
+      const contactList = editDialog.querySelector('[data-contact-list]');
+      editDialog.querySelector('[data-add-contact]').addEventListener('click', () => {
+        contactList.insertAdjacentHTML('beforeend', contactEntryMarkup({ type:'person', icon:'user-round' }));
+        contactList.lastElementChild.querySelector('[name="contactName"]').focus();
+      });
+      editDialog.querySelector('#contact-directory-form').addEventListener('submit', async formEvent => {
+        formEvent.preventDefault();
+        const records = [...contactList.querySelectorAll('.contact-entry')].map(row => ({
+          row,
+          name: row.querySelector('[name="contactName"]').value.trim(),
+          type: row.querySelector('[name="contactType"]').value,
+          role: row.querySelector('[name="contactRole"]').value.trim(),
+          phone: row.querySelector('[name="contactPhone"]').value.trim(),
+          website: row.querySelector('[name="contactWebsite"]').value.trim()
+        })).filter(record => record.name);
+        records.forEach(record => {
+          const id = record.row.dataset.contactId || `contact-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+          const existing = timelineData.entities.find(entity => entity.id === id);
+          const next = { id, type:record.type, name:record.name, role:record.role, phone:record.phone, website:record.website, icon:record.row.dataset.contactIcon || 'user-round' };
+          if (existing) Object.assign(existing, next); else timelineData.entities.push(next);
+        });
+        try { await persistPlan(); editModal.hidden = true; renderOperationalViews('people'); }
+        catch (error) { alert(`Contacts could not be saved: ${error.message}`); }
+      });
+    }
     const decorationAssignmentFields = assignment => `<fieldset class="decor-assignment-fields" data-assignment-id="${assignment.id || ''}"><label>Period<select name="decorationPeriodId">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === assignment.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label>Set up<textarea name="decorationSetup" placeholder="e.g. Along the ceremony fireplace">${assignment.setup || ''}</textarea></label><label>Movement to next period<textarea name="decorationMovements" placeholder="e.g. Move to the wedding breakfast top table after the ceremony">${assignment.movements || ''}</textarea></label><label>Item reference photo URL (optional)<input name="decorationPhotoUrl" type="url" value="${assignment.photoUrl || ''}" placeholder="https://…"></label><label>Or upload item reference photo<input name="decorationPhotoFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><label>Layout image / diagram URL (optional)<input name="decorationLayoutImageUrl" type="url" value="${assignment.layoutImageUrl || ''}" placeholder="https://…"></label><label>Or upload layout image / diagram<input name="decorationLayoutImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><button class="decor-assignment-remove" type="button" data-remove-decoration-assignment>Remove assignment</button></fieldset>`;
     function openDecorationItemEditor(itemId) {
       const item = itemId ? timelineData.decorationItems.find(record => record.id === itemId) : null;
