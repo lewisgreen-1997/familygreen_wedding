@@ -69,7 +69,7 @@
     .sub-event p[data-inline-field="detail"] { white-space:pre-wrap; }
     .time-point[open] summary:after,.sub-event[open] summary:after,.period-toggle:before,.nav-group[open] summary:after,.decor-item[open] > summary:after { content:'-' !important; }
     .timeline-expand-controls { display:flex; gap:7px; margin:0 0 14px; } .timeline-expand-controls[hidden] { display:none !important; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; }
-    .map-view-head,.person-view-toolbar { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.person-view-toolbar button { padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .person-view-toolbar .person-picker { width:min(380px,100%); margin:0; } .person-toolbar-actions { display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end; } .contact-directory { display:grid; gap:9px; } .contact-directory-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 6px; } .contact-directory-head p { margin:0; color:#6386a5; font-size:.88rem; } .contact-entry { display:grid; grid-template-columns:1.1fr .72fr .8fr .95fr 1.2fr; gap:8px; padding:10px; border:1px solid #d6e3ed; background:#f8fbfd; } .contact-entry label { display:grid; gap:4px; color:#527a9f; font:700 .54rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .contact-entry input,.contact-entry select { width:100%; min-width:0; padding:7px 8px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:1rem 'Cormorant Garamond',Georgia,serif; } .contact-add { justify-self:start; padding:7px 9px; font-size:.6rem; } @media(max-width:760px) { .map-view-head,.person-view-toolbar { align-items:flex-start; flex-direction:column; } .person-toolbar-actions { justify-content:flex-start; } .contact-entry { grid-template-columns:1fr 1fr; } }
+    .map-view-head,.person-view-toolbar { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.person-view-toolbar button { padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .person-view-toolbar .person-picker { width:min(380px,100%); margin:0; } .person-toolbar-actions { display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end; } .contact-directory { display:grid; gap:9px; } .contact-directory-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 6px; } .contact-directory-head p { margin:0; color:#6386a5; font-size:.88rem; } .contact-entry { display:grid; grid-template-columns:1.1fr .72fr .8fr .95fr 1.2fr auto; align-items:end; gap:8px; padding:10px; border:1px solid #d6e3ed; background:#f8fbfd; } .contact-entry label { display:grid; gap:4px; color:#527a9f; font:700 .54rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .contact-entry input,.contact-entry select { width:100%; min-width:0; padding:7px 8px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:1rem 'Cormorant Garamond',Georgia,serif; } .contact-delete { padding:7px 8px; border:1px solid #c67676; background:#fff; color:#9f2f2f; font:700 .55rem 'Manrope',Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; } .contact-add { justify-self:start; padding:7px 9px; font-size:.6rem; } @media(max-width:760px) { .map-view-head,.person-view-toolbar { align-items:flex-start; flex-direction:column; } .person-toolbar-actions { justify-content:flex-start; } .contact-entry { grid-template-columns:1fr 1fr; } }
   </style>
 </head>
 <body class="timeline-only">
@@ -506,7 +506,7 @@
     editModal.innerHTML = '<div class="edit-dialog" role="dialog" aria-modal="true"></div>';
     document.body.appendChild(editModal);
     const editDialog = editModal.querySelector('.edit-dialog');
-    const contactEntryMarkup = entity => `<div class="contact-entry" data-contact-id="${entity.id || ''}" data-contact-icon="${entity.icon || 'user-round'}"><label>Name<input name="contactName" required value="${entity.name || ''}" placeholder="Name"></label><label>Type<select name="contactType"><option value="person" ${entity.type === 'person' ? 'selected' : ''}>Person</option><option value="supplier" ${entity.type === 'supplier' ? 'selected' : ''}>Supplier</option></select></label><label>Role<input name="contactRole" value="${entity.role || ''}" placeholder="e.g. Master of Ceremonies"></label><label>Phone<input name="contactPhone" type="tel" value="${entity.phone || ''}" placeholder="Phone number"></label><label>Website or link<input name="contactWebsite" type="url" value="${entity.website || ''}" placeholder="https://..."></label></div>`;
+    const contactEntryMarkup = entity => `<div class="contact-entry" data-contact-id="${entity.id || ''}" data-contact-icon="${entity.icon || 'user-round'}"><label>Name<input name="contactName" required value="${entity.name || ''}" placeholder="Name"></label><label>Type<select name="contactType"><option value="person" ${entity.type === 'person' ? 'selected' : ''}>Person</option><option value="supplier" ${entity.type === 'supplier' ? 'selected' : ''}>Supplier</option></select></label><label>Role<input name="contactRole" value="${entity.role || ''}" placeholder="e.g. Master of Ceremonies"></label><label>Phone<input name="contactPhone" type="tel" value="${entity.phone || ''}" placeholder="Phone number"></label><label>Website or link<input name="contactWebsite" type="url" value="${entity.website || ''}" placeholder="https://..."></label><button type="button" class="contact-delete" data-delete-contact>Delete</button></div>`;
     function openContactDirectory() {
       const contacts = timelineData.entities.filter(entity => !['location', 'period'].includes(entity.type)).sort((left, right) => left.name.localeCompare(right.name));
       editDialog.innerHTML = `<button class="decor-close" type="button">Close</button><span class="section-kicker">Shared records</span><h2>Contacts</h2><p class="editor-note">Manage the names, roles, phone numbers and links available throughout the wedding plan.</p><form class="contact-directory" id="contact-directory-form"><div class="contact-directory-head"><span>Contact details</span><button type="button" class="contact-add" data-add-contact>+ Add contact</button></div><div data-contact-list>${contacts.map(contactEntryMarkup).join('')}</div><div class="form-actions"><button type="button" class="decor-close">Cancel</button><button type="submit">Save contacts</button></div></form>`;
@@ -514,9 +514,19 @@
       editDialog.querySelector('.decor-close').focus();
       editDialog.querySelectorAll('.decor-close').forEach(button => button.addEventListener('click', () => { editModal.hidden = true; }));
       const contactList = editDialog.querySelector('[data-contact-list]');
+      const deletedContactIds = new Set();
       editDialog.querySelector('[data-add-contact]').addEventListener('click', () => {
         contactList.insertAdjacentHTML('beforeend', contactEntryMarkup({ type:'person', icon:'user-round' }));
         contactList.lastElementChild.querySelector('[name="contactName"]').focus();
+      });
+      contactList.addEventListener('click', event => {
+        const trigger = event.target.closest('[data-delete-contact]');
+        if (!trigger) return;
+        const row = trigger.closest('.contact-entry');
+        const name = row.querySelector('[name="contactName"]').value.trim() || 'this contact';
+        if (!confirm(`Delete ${name}? This will also remove them from all owner and informed links.`)) return;
+        if (row.dataset.contactId) deletedContactIds.add(row.dataset.contactId);
+        row.remove();
       });
       editDialog.querySelector('#contact-directory-form').addEventListener('submit', async formEvent => {
         formEvent.preventDefault();
@@ -534,7 +544,15 @@
           const next = { id, type:record.type, name:record.name, role:record.role, phone:record.phone, website:record.website, icon:record.row.dataset.contactIcon || 'user-round' };
           if (existing) Object.assign(existing, next); else timelineData.entities.push(next);
         });
-        try { await persistPlan(); editModal.hidden = true; renderOperationalViews('people'); }
+        if (deletedContactIds.size) {
+          timelineData.entities = timelineData.entities.filter(entity => !deletedContactIds.has(entity.id));
+          timelineData.relationships = timelineData.relationships.filter(relation => !deletedContactIds.has(relation.entityId));
+        }
+        try {
+          await persistPlan();
+          if (normalisedStoreActive && deletedContactIds.size) await Promise.all([...deletedContactIds].map(id => api(`wedding_entities?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers:{ Prefer:'return=minimal' } })));
+          editModal.hidden = true; renderOperationalViews('people');
+        }
         catch (error) { alert(`Contacts could not be saved: ${error.message}`); }
       });
     }
