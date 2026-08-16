@@ -359,7 +359,7 @@
       const contacts = timelineData.entities.filter(entity => !['period', 'location'].includes(entity.type));
       const locations = timelineData.entities.filter(entity => entity.type === 'location');
       const workstreams = ['','HMU','Music','Photography','Food & drinks','Venue & decor','Logistics','General'];
-      return `<label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Workstream<select data-inline-workstream-event-id="${event.id}">${workstreams.map(workstream => `<option value="${workstream}" ${workstream === (event.workstream || '') ? 'selected' : ''}>${workstream || 'Auto-detect'}</option>`).join('')}</select></label>`;
+      return `<label class="inline-relation-field">Period<select data-inline-period-event-id="${event.id}">${timelineData.periods.map(period => `<option value="${period.id}" ${period.id === event.periodId ? 'selected' : ''}>${period.name}</option>`).join('')}</select></label><label class="inline-relation-field">Owner<select data-inline-owner-event-id="${event.id}"><option value="">No owner</option>${contacts.map(entity => `<option value="${entity.id}" ${entity.id === ownerId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Informed<select multiple data-inline-informed-event-id="${event.id}" aria-label="Informed contacts">${contacts.map(entity => `<option value="${entity.id}" ${informedIds.includes(entity.id) ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Location<select data-inline-location-event-id="${event.id}"><option value="">No location</option>${locations.map(entity => `<option value="${entity.id}" ${entity.id === event.locationId ? 'selected' : ''}>${entity.name}</option>`).join('')}</select></label><label class="inline-relation-field">Workstream<select data-inline-workstream-event-id="${event.id}">${workstreams.map(workstream => `<option value="${workstream}" ${workstream === (event.workstream || '') ? 'selected' : ''}>${workstream || 'Auto-detect'}</option>`).join('')}</select></label>`;
     }
     function renderInlineRelationControls(scope = timelineView) {
       scope.querySelectorAll('.inline-relation-actions').forEach(container => {
@@ -656,9 +656,16 @@
       modal.addEventListener('keydown', event => { if (event.key === 'Escape') close(); if (event.key === 'Enter' && event.target === input) { field.textContent = displayTime(input.value); close(); } });
     }
     timelineView.addEventListener('change', event => {
+      const periodSelect = event.target.closest('[data-inline-period-event-id]');
       const ownerSelect = event.target.closest('[data-inline-owner-event-id]');
       const locationSelect = event.target.closest('[data-inline-location-event-id]');
       const workstreamSelect = event.target.closest('[data-inline-workstream-event-id]');
+      if (periodSelect) {
+        const record = timelineData.events.find(item => item.id === periodSelect.dataset.inlinePeriodEventId);
+        if (record) record.periodId = periodSelect.value;
+        persistPlan().then(() => window.location.reload()).catch(error => alert(`Period could not be updated: ${error.message}`));
+        return;
+      }
       if (ownerSelect) {
         const eventId = ownerSelect.dataset.inlineOwnerEventId; const detail = eventPrimaryDetail(eventId); const detailIds = detailsFor(eventId).map(item => item.id);
         timelineData.relationships = timelineData.relationships.filter(relation => !(detailIds.includes(relation.detailId) && relation.role === 'owner'));
