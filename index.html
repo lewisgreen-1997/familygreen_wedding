@@ -68,8 +68,9 @@
     @media(min-width:701px) { .time-point summary { padding-right:360px; } .time-point:not([open]) summary { padding-right:360px; } .event-actions { z-index:3; right:12px; } .event-owner-wrap { right:50px; max-width:300px; } .event-owner-pill { white-space:nowrap; } }
     .sub-event p[data-inline-field="detail"] { white-space:pre-wrap; }
     .time-point[open] summary:after,.sub-event[open] summary:after,.period-toggle:before,.nav-group[open] summary:after,.decor-item[open] > summary:after { content:'-' !important; }
-    .timeline-expand-controls { display:flex; gap:7px; margin:0 0 14px; } .timeline-expand-controls[hidden] { display:none !important; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; }
+    .timeline-expand-controls { display:flex; align-items:end; gap:7px; margin:0 0 14px; } .timeline-expand-controls[hidden] { display:none !important; } .timeline-expand-controls button { padding:6px 8px; border-color:#c6d5e2; color:#527a9f; font-size:.57rem; } .timeline-person-filter { width:min(300px,100%); margin:0; color:#527a9f; font:700 .55rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .timeline-person-filter select { margin-top:4px; min-height:31px; font-size:1rem; }
     .map-view-head,.person-view-toolbar { display:flex; align-items:end; justify-content:space-between; gap:10px; margin:0 0 13px; } .map-view-head .map-note { margin:0; } .map-view-head button,.person-view-toolbar button { padding:6px 8px; border:1px solid #c6d5e2; background:#fff; color:#527a9f; font:700 .57rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; cursor:pointer; } .person-view-toolbar .person-picker { width:min(380px,100%); margin:0; } .person-toolbar-actions { display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end; } .contact-directory { display:grid; gap:9px; } .contact-directory-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:0 0 6px; } .contact-directory-head p { margin:0; color:#6386a5; font-size:.88rem; } .contact-entry { display:grid; grid-template-columns:1.1fr .72fr .8fr .95fr 1.2fr auto; align-items:end; gap:8px; padding:10px; border:1px solid #d6e3ed; background:#f8fbfd; } .contact-entry label { display:grid; gap:4px; color:#527a9f; font:700 .54rem 'Manrope',Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; } .contact-entry input,.contact-entry select { width:100%; min-width:0; padding:7px 8px; border:1px solid #a9c2d7; background:#fff; color:var(--pine); font:1rem 'Cormorant Garamond',Georgia,serif; } .contact-delete { padding:7px 8px; border:1px solid #c67676; background:#fff; color:#9f2f2f; font:700 .55rem 'Manrope',Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; } .contact-add { justify-self:start; padding:7px 9px; font-size:.6rem; } @media(max-width:760px) { .map-view-head,.person-view-toolbar { align-items:flex-start; flex-direction:column; } .person-toolbar-actions { justify-content:flex-start; } .contact-entry { grid-template-columns:1fr 1fr; } }
+    .contacts-table { border:1px solid #c8dbe8; background:#fff; } .contacts-table-head,.contacts-table-row { display:grid; grid-template-columns:1.3fr .6fr 1fr .9fr 1fr; gap:12px; padding:10px 14px; align-items:center; } .contacts-table-head { background:#f1f7fb; color:#527a9f; font:700 .56rem 'Manrope',Arial,sans-serif; letter-spacing:.08em; text-transform:uppercase; } .contacts-table-row { border-top:1px solid #dbe7ef; color:#264258; font-size:.9rem; } .contacts-table-row strong { display:flex; align-items:center; gap:6px; color:#123c70; font-size:1rem; } .contacts-table-row a { color:#356b9f; font:700 .62rem 'Manrope',Arial,sans-serif; letter-spacing:.05em; text-transform:uppercase; } @media(max-width:760px) { .timeline-expand-controls { align-items:stretch; flex-direction:column; } .timeline-person-filter { width:100%; } .contacts-table { overflow-x:auto; } .contacts-table-head,.contacts-table-row { min-width:720px; } }
   </style>
 </head>
 <body class="timeline-only">
@@ -242,8 +243,9 @@
     const timelineData = remotePlan ? structuredClone(remotePlan) : savedPlan ? JSON.parse(savedPlan) : emptyPlan;
     timelineData.decorationItems ||= [];
     const timelineView = document.querySelector('#timeline-view');
-    const entityById = Object.fromEntries(timelineData.entities.map(entity => [entity.id, entity]));
-    const periodById = Object.fromEntries(timelineData.periods.map(period => [period.id, period]));
+    let entityById = Object.fromEntries(timelineData.entities.map(entity => [entity.id, entity]));
+    let periodById = Object.fromEntries(timelineData.periods.map(period => [period.id, period]));
+    const refreshRecordIndexes = () => { entityById = Object.fromEntries(timelineData.entities.map(entity => [entity.id, entity])); periodById = Object.fromEntries(timelineData.periods.map(period => [period.id, period])); };
     const detailsFor = eventId => timelineData.eventDetails.filter(detail => detail.eventId === eventId);
     const relationsFor = detailId => timelineData.relationships.filter(relation => relation.detailId === detailId);
     const entityIcon = entity => `<i class="entity-icon" data-lucide="${entity.icon || 'circle'}"></i>`;
@@ -264,19 +266,21 @@
       const sequenceLabel = '';
       return `<details class="time-point ${event.major ? 'major' : ''} ${sequenceClass}" data-event-id="${event.id}" style="--gap:${gap}px"><summary><time class="event-time ${event.time === 'TBC' ? 'tbc' : ''}" data-inline-field="time" contenteditable="false">${event.time}</time><span class="event-title"><span data-inline-field="title" contenteditable="false">${event.title}</span>${sequenceLabel}</span>${location ? `<span class="event-location-pill">${entityIcon(locationEntity)}${location}<button class="relation-remove" type="button" title="Remove ${location}" data-remove-location-event-id="${event.id}">&times;</button></span>` : ''}${eventOwnerMarkup(event)}</summary><div class="event-detail"><div class="sub-events">${detailsFor(event.id).map(detailMarkup).join('')}</div><div class="inline-relation-actions"><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="owner">+ Owner</button><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="informed">+ Informed</button><button type="button" data-add-relation-event-id="${event.id}" data-add-relation-role="location">+ Location</button></div></div><div class="event-actions"><button class="event-edit-icon" type="button" title="Edit event" aria-label="Edit ${event.title}" data-edit-event-id="${event.id}"><i data-lucide="pencil"></i></button><button class="event-edit-icon event-save" type="button" title="Save event" aria-label="Save ${event.title}" data-save-event-id="${event.id}"><i data-lucide="check"></i></button><button class="event-edit-icon event-cancel" type="button" title="Cancel editing" aria-label="Cancel editing" data-cancel-event-id="${event.id}"><i data-lucide="x"></i></button></div></details>`;
     };
-    const timelineEvents = [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort);
-    const minutesOf = sortValue => Math.floor(sortValue / 100) * 60 + (sortValue % 100);
-    const timelineMarkup = [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => {
-      const periodEvents = timelineEvents.filter(event => event.periodId === period.id).sort((a, b) => a.sort - b.sort || a.title.localeCompare(b.title)); let previousEvent = null;
+    const timelineEvents = () => [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort);
+    let selectedTimelinePersonId = '';
+    const timelineMarkup = (personId = '') => [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => {
+      const periodEvents = timelineEvents().filter(event => event.periodId === period.id && (!personId || eventPeople(event).some(person => person.id === personId))).sort((a, b) => a.sort - b.sort || a.title.localeCompare(b.title));
+      if (personId && !periodEvents.length) return '';
+      let previousEvent = null;
       const eventMarkupForPeriod = periodEvents.map(event => {
         const gap = previousEvent ? 8 : 6;
         previousEvent = event; return eventMarkup(event, gap);
       }).join('');
-      return `<section class="period-group" data-period-group="${period.id}"><div class="period-header"><button class="period-toggle" type="button" data-toggle-period-id="${period.id}">${period.name}</button><button class="period-add" type="button" data-add-period-id="${period.id}">+ Add event</button><button class="period-decor" type="button" data-period-id="${period.id}">Decoration setup &nearr;</button></div><div class="period-events">${eventMarkupForPeriod}</div></section>`;
-    }).join('');
-    timelineView.innerHTML = `<span class="section-kicker">Wedding day operations &middot; ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
+      return `<section class="period-group" data-period-group="${period.id}"><div class="period-header"><button class="period-toggle" type="button" data-toggle-period-id="${period.id}">${period.name}</button><button class="period-add" type="button" data-add-period-id="${period.id}">+ Add event</button><button class="period-decor" type="button" data-period-id="${period.id}">Decoration setup &nearr;</button></div><div class="period-events">${eventMarkupForPeriod || '<p class="map-note">No events scheduled in this period.</p>'}</div></section>`;
+    }).join('') || '<p class="map-note">No events match this contact.</p>';
+    timelineView.innerHTML = `<span class="section-kicker">Wedding day operations &middot; ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup()}</div>`;
     const dayline = timelineView.querySelector('.dayline');
-    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button><button type="button" data-export-master>Export master timeline</button></div>');
+    dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><label class="timeline-person-filter">Filter by person or supplier<select data-timeline-person-select></select></label><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button><button type="button" data-export-master>Export master timeline</button><button type="button" data-export-person hidden>Export filtered schedule</button></div>');
     const periodControls = timelineView.querySelector('.timeline-expand-controls');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
@@ -299,6 +303,21 @@
     };
     const eventLocation = event => event.locationId ? entityById[event.locationId]?.name || 'Unassigned' : 'Unassigned';
     const eventPeople = event => [...new Set(['owner', 'informed'].flatMap(role => eventEntityIds(event.id, role)))].map(id => entityById[id]).filter(Boolean);
+    const timelinePersonSelect = periodControls.querySelector('[data-timeline-person-select]');
+    const filteredExportButton = periodControls.querySelector('[data-export-person]');
+    function renderTimelineFilter() {
+      const contacts = timelineData.entities.filter(entity => !['location', 'period'].includes(entity.type)).sort((left, right) => left.name.localeCompare(right.name));
+      if (selectedTimelinePersonId && !contacts.some(contact => contact.id === selectedTimelinePersonId)) selectedTimelinePersonId = '';
+      timelinePersonSelect.innerHTML = `<option value="">All people & suppliers</option>${contacts.map(contact => `<option value="${contact.id}" ${contact.id === selectedTimelinePersonId ? 'selected' : ''}>${contact.name}</option>`).join('')}`;
+      filteredExportButton.hidden = !selectedTimelinePersonId;
+    }
+    function renderFilteredTimeline() {
+      dayline.innerHTML = timelineMarkup(selectedTimelinePersonId);
+      renderInlineRelationControls(timelineView);
+      applySeriesThemes(timelineView);
+      if (window.lucide) window.lucide.createIcons();
+    }
+    renderTimelineFilter();
     function eventWorkstream(event) { return event.workstream || ''; }
     const workstreamOrder = ['Guest Flow','Music','Morning Logistics','Food & Beverage'];
     const escapePrint = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[character]);
@@ -323,7 +342,7 @@
     }
     function exportMasterTimeline() { openPdfExport('Master timeline', "Full operational run-sheet for Lewis and Megan's wedding day.", exportPeriodsMarkup(timelineData.events)); }
     function exportSelectedPerson() {
-      const personId = operationalMap.dataset.personId;
+      const personId = selectedTimelinePersonId;
       const person = entityById[personId];
       if (!person) { alert('Choose a person or supplier first.'); return; }
       const events = timelineData.events.filter(event => eventPeople(event).some(item => item.id === personId));
@@ -354,16 +373,11 @@
     };
     function renderOperationalViews(view = 'master') {
       const events = [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort || a.title.localeCompare(b.title));
-      if (view === 'master') { dayline.hidden = false; periodControls.hidden = false; operationalMap.classList.remove('active'); return; }
+      if (view === 'master') { renderTimelineFilter(); renderFilteredTimeline(); dayline.hidden = false; periodControls.hidden = false; operationalMap.classList.remove('active'); return; }
       periodControls.hidden = true;
       if (view === 'people') {
-        const people = new Map();
-        events.forEach(event => eventPeople(event).forEach(person => { if (!people.has(person.id)) people.set(person.id, { person, events:[] }); people.get(person.id).events.push(event); }));
-        const orderedPeople = [...people.values()].sort((a, b) => a.events[0].sort - b.events[0].sort || a.person.name.localeCompare(b.person.name));
-        const selectedId = people.has(operationalMap.dataset.personId) ? operationalMap.dataset.personId : orderedPeople[0]?.person.id;
-        const selected = people.get(selectedId);
-        const periodColumns = selected ? [...timelineData.periods].sort((a, b) => a.order - b.order).map(period => ({ period, events:selected.events.filter(event => event.periodId === period.id) })).filter(column => column.events.length) : [];
-        operationalMap.innerHTML = `<div class="person-view-toolbar"><label class="person-picker">Choose person or supplier<select data-person-view-select>${orderedPeople.map(item => `<option value="${item.person.id}" ${item.person.id === selectedId ? 'selected' : ''}>${item.person.name}</option>`).join('')}</select></label><div class="person-toolbar-actions"><button type="button" data-open-contacts>Contacts</button>${selected ? '<button type="button" data-export-person>Export selected person</button>' : ''}</div></div>${selected ? `<section class="person-run-sheet"><h3>${selected.person.name}</h3><div class="person-periods">${periodColumns.map(column => `<section class="person-period"><h4>${column.period.name}</h4><div class="person-period-events">${column.events.map(mapEventMarkup).join('')}</div></section>`).join('')}</div></section>` : '<p class="map-note">No people have been linked to events yet.</p>'}`;
+        const contacts = timelineData.entities.filter(entity => !['location', 'period'].includes(entity.type)).sort((left, right) => left.name.localeCompare(right.name));
+        operationalMap.innerHTML = `<div class="map-view-head"><p class="map-note">Shared contact directory &middot; add, update or remove people and suppliers used in event ownership and notifications.</p><button type="button" data-open-contacts>Manage contacts</button></div><section class="contacts-table"><div class="contacts-table-head"><span>Name</span><span>Type</span><span>Role</span><span>Phone</span><span>Website / link</span></div>${contacts.map(contact => `<article class="contacts-table-row"><strong>${entityIcon(contact)}${contact.name}</strong><span>${contact.type}</span><span>${contact.role || '—'}</span><span>${contact.phone || '—'}</span><span>${contact.website ? `<a href="${contact.website}" target="_blank" rel="noopener">Open link &nearr;</a>` : '—'}</span></article>`).join('') || '<p class="map-note">No contacts yet. Use Manage contacts to add the first one.</p>'}</section>`;
         dayline.hidden = true; operationalMap.classList.add('active'); if (window.lucide) window.lucide.createIcons(); return;
       }
       if (view === 'decorations') {
@@ -402,11 +416,12 @@
       const mapEvent = event.target.closest('[data-map-event-id]');
       if (mapEvent) return;
     });
-    operationalMap.addEventListener('change', event => {
-      const selector = event.target.closest('[data-person-view-select]');
+    timelineView.addEventListener('change', event => {
+      const selector = event.target.closest('[data-timeline-person-select]');
       if (!selector) return;
-      operationalMap.dataset.personId = selector.value;
-      renderOperationalViews('people');
+      selectedTimelinePersonId = selector.value;
+      renderTimelineFilter();
+      renderFilteredTimeline();
     });
     function inlineRelationControls(event) {
       const ownerId = eventEntityIds(event.id, 'owner')[0] || '';
@@ -548,6 +563,8 @@
           timelineData.entities = timelineData.entities.filter(entity => !deletedContactIds.has(entity.id));
           timelineData.relationships = timelineData.relationships.filter(relation => !deletedContactIds.has(relation.entityId));
         }
+        refreshRecordIndexes();
+        renderTimelineFilter();
         try {
           await persistPlan();
           if (normalisedStoreActive && deletedContactIds.size) await Promise.all([...deletedContactIds].map(id => api(`wedding_entities?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers:{ Prefer:'return=minimal' } })));
