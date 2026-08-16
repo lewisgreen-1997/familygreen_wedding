@@ -274,6 +274,7 @@
     timelineView.innerHTML = `<span class="section-kicker">Wedding day operations &middot; ${timelineData.wedding.date}</span><h2>Saturday, 22 August 2026.</h2><p class="intro">A single operational timeline. Open an event, then its detail records; select a related record to see every item connected to it.</p><div class="entity-view" id="entity-view" hidden></div><div class="timeline-key"><span><b>Open an event</b> for records</span><span>Sources: wedding plan & confirmed hotel function sheet</span></div><div class="dayline">${timelineMarkup}</div>`;
     const dayline = timelineView.querySelector('.dayline');
     dayline.insertAdjacentHTML('beforebegin', '<div class="view-switcher" role="tablist" aria-label="Operational views"><button type="button" class="active" data-timeline-view="master">Timeline</button><button type="button" data-timeline-view="people">People</button><button type="button" data-timeline-view="workstream">Workstreams</button><button type="button" data-timeline-view="location">Locations</button><button type="button" data-timeline-view="decorations">Decorations</button></div><div class="timeline-expand-controls"><button type="button" data-expand-periods>Expand all periods</button><button type="button" data-collapse-periods>Collapse all periods</button></div>');
+    const periodControls = timelineView.querySelector('.timeline-expand-controls');
     const operationalMap = document.createElement('section');
     operationalMap.className = 'operational-map';
     operationalMap.setAttribute('aria-live', 'polite');
@@ -321,7 +322,8 @@
     }
     function renderOperationalViews(view = 'master') {
       const events = [...timelineData.events].sort((a, b) => periodById[a.periodId].order - periodById[b.periodId].order || a.sort - b.sort || a.title.localeCompare(b.title));
-      if (view === 'master') { dayline.hidden = false; operationalMap.classList.remove('active'); return; }
+      if (view === 'master') { dayline.hidden = false; periodControls.hidden = false; operationalMap.classList.remove('active'); return; }
+      periodControls.hidden = true;
       if (view === 'people') {
         const people = new Map();
         events.forEach(event => eventPeople(event).forEach(person => { if (!people.has(person.id)) people.set(person.id, { person, events:[] }); people.get(person.id).events.push(event); }));
