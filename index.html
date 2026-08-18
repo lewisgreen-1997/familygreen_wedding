@@ -350,6 +350,33 @@
       const exportWindow = window.open('', '_blank');
       if (!exportWindow) { alert('Please allow pop-ups to export this PDF.'); return; }
       exportWindow.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${escapePrint(title)}</title><style>@page{size:A4;margin:15mm}*{box-sizing:border-box}body{margin:0;color:#102b42;background:#fff;font-family:Georgia,'Times New Roman',serif;font-size:10.5pt;line-height:1.42}.document-header{padding:0 0 18px;border-bottom:2px solid #789aba}.kicker,.print-period>h2,.print-details span{font:700 8pt Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#356b9f}.kicker{margin:0 0 7px}.document-header h1{margin:0;color:#102b42;font-size:30pt;font-weight:normal;line-height:1.05}.document-header p{margin:8px 0 0;color:#536b7e}.print-period{margin:22px 0 0;break-inside:avoid}.print-period>h2{margin:0;padding:0 0 6px;border-bottom:1px solid #b7ccde;font-size:9pt}.print-event{margin:0;padding:13px 0;border-bottom:1px solid #d6e2eb;break-inside:avoid}.print-event header{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:baseline}.print-event time{color:#376d9e;font:700 8.5pt Arial,sans-serif}.print-event h3{margin:0;color:#102b42;font-size:15pt;font-weight:normal}.print-meta{margin:6px 0 0;color:#486278;font:8pt Arial,sans-serif}.print-details{margin:9px 0 0;padding:9px 11px;background:#f6f9fc;border-left:3px solid #86a9c7}.print-details section+section{margin-top:9px;padding-top:9px;border-top:1px solid #d7e4ed}.print-details h4{margin:2px 0 0;color:#183b57;font-size:11pt}.print-details p{margin:3px 0 0;white-space:pre-wrap}.print-details small{display:block;margin-top:5px;color:#5d7588;font:8pt Arial,sans-serif}.print-empty{margin:0;color:#647b8d}@media print{.print-period{break-inside:auto}.print-event{break-inside:avoid}}</style></head><body><header class="document-header"><p class="kicker">Wedding day operations &middot; ${escapePrint(timelineData.wedding.date)}</p><h1>${escapePrint(title)}</h1><p>${escapePrint(subtitle)}</p></header>${content}</body></html>`);
+      exportWindow.document.write(`<style>
+        body{color:#17344c;background:#fffdf9;font-family:Georgia,'Times New Roman',serif;font-size:10pt;line-height:1.46}
+        .document-header{margin:0 0 24px;padding:0 0 16px;border-bottom:1px solid #d9c39e}
+        .document-header h1{color:#17344c;font-size:27pt;letter-spacing:-.02em}
+        .document-header p{color:#617889}
+        .kicker{color:#9c702d!important}
+        .print-period{margin:25px 0 0;padding:0;break-inside:auto}
+        .print-period>h2{padding:0 0 7px;border-bottom:2px solid #d5c09a;color:#17344c;font-size:8.5pt;letter-spacing:.14em}
+        .print-event{position:relative;margin:12px 0 0;padding:14px 16px 15px;border:1px solid #d6e1e8;border-left:4px solid #b68a4e;background:#fff;break-inside:avoid}
+        .print-event header{grid-template-columns:74px 1fr;gap:13px;align-items:start}
+        .print-event time{padding-top:3px;color:#a36e24;font:700 8.5pt Arial,sans-serif;letter-spacing:.03em}
+        .print-event h3{color:#17344c;font-size:16pt;line-height:1.15}
+        .print-meta{margin:7px 0 0 87px;color:#5d7180;font:7.8pt Arial,sans-serif;line-height:1.5}
+        .print-details{margin:12px 0 0 87px;padding:10px 12px;border:1px solid #e4dbc9;border-left:3px solid #d6b577;background:#fcfaf5}
+        .print-details section+section{margin-top:9px;padding-top:9px;border-top:1px solid #eadfcd}
+        .print-details span{color:#9c702d;font-size:7.5pt}
+        .print-details h4{color:#17344c;font-size:11.5pt}
+        .print-details p{color:#314b5e}
+        .print-event-briefs{margin:12px 0 0 87px;padding-top:10px;border-top:1px solid #d9e3ea}
+        .print-event-briefs>span{display:block;margin-bottom:7px;color:#527a9f;font:700 7.5pt Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+        .print-brief{margin-top:8px!important;padding:10px 12px!important;border:1px solid #d4e2ec!important;border-left:3px solid #789aba!important;background:#f7fbfe!important}
+        .print-brief h4{color:#17344c!important}
+        .print-brief p{margin:4px 0 0;white-space:pre-wrap}
+        .print-brief ol{margin:5px 0 0;padding-left:21px}
+        .print-brief img{margin-top:7px;border:1px solid #d1dee8;background:#fff}
+        @media print{body{background:#fffdf9}.print-event{box-shadow:none}.print-period{break-inside:auto}.print-event{break-inside:avoid}}
+      </style>`);
       exportWindow.document.close();
       exportWindow.focus();
       setTimeout(() => exportWindow.print(), 300);
